@@ -1,2 +1,3 @@
-# sprint-planner-app
-Nextjs code for SprintPlanner app
+## SprintPlanner 
+
+Ideas -> 4 weeks plan
