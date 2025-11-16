@@ -67,8 +67,7 @@ This project follows [Conventional Commits](https://www.conventionalcommits.org/
 ### Validation
 
 Commit messages are automatically validated using:
-- **Husky**: Pre-commit hook validates commit messages locally
-- **GitHub Actions**: CI workflow validates commit messages in pull requests
+- **Husky**: Pre-commit hook validates commit messages locally before commits are created
 
 ## CI/CD
 
@@ -79,7 +78,6 @@ This project uses GitHub Actions for continuous integration. The CI workflow run
 The CI pipeline includes:
 1. **Lint**: Runs ESLint to check code quality
 2. **Build**: Builds the Next.js application to ensure it compiles successfully
-3. **Commitlint**: Validates commit messages in pull requests
 
 ## Deploy on Vercel
 
