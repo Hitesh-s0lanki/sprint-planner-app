@@ -1,11 +1,12 @@
 import { db } from "@/index";
-import { users } from "@/db/schema";
+import { users } from "@/db/users";
 import { auth, currentUser } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
+import { NextResponse } from "next/server";
 
 export async function POST() {
-  const { userId } =await auth();
-  if (!userId) return new Response("Not authenticated", { status: 401 });
+  const { userId } = await auth();
+  if (!userId) return new NextResponse("Not authenticated", { status: 401 });
 
   const clerkUser = await currentUser();
 
@@ -16,7 +17,7 @@ export async function POST() {
     .where(eq(users.clerkId, userId));
 
   if (existing.length > 0)
-    return new Response("User exists", { status: 200 });
+    return new NextResponse("User already exists", { status: 200 });
 
   await db.insert(users).values({
     clerkId: userId,
@@ -24,5 +25,5 @@ export async function POST() {
     name: clerkUser?.firstName + " " + clerkUser?.lastName,
   });
 
-  return new Response("User created");
+  return new NextResponse("User created", { status: 201 });
 }
