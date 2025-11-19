@@ -1,65 +1,85 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { createConversationId } from "@/lib/create-conversation";
+import { Button } from "@/components/ui/button";
+import { Paperclip, Plus, Mic, ArrowUp } from "lucide-react";
+
+export default function HomePage() {
+  const router = useRouter();
+  const [prompt, setPrompt] = useState("");
+
+  const handleSubmit = () => {
+    if (!prompt.trim()) return;
+
+    const id = createConversationId();
+
+    router.push(`/conversations/${id}?q=${encodeURIComponent(prompt)}`);
+  };
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <div className="min-h-screen w-full flex flex-col items-center justify-center overflow-hidden bg-linear-to-b from-white to-gray-100">
+      
+      {/* HERO TITLE */}
+      <div className="text-center mb-10 mt-16">
+        <h1 className="text-5xl md:text-6xl font-semibold text-gray-900 tracking-tight">
+          Build something{" "}
+          <span className="text-transparent bg-clip-text bg-linear-to-r from-green-500 via-emerald-400 to-emerald-900">
+            Sprint Planner
+          </span>
+        </h1>
+
+        <p className="text-gray-600 mt-3 text-lg">
+          Create by chatting with AI
+        </p>
+      </div>
+
+      {/* INPUT BOX AREA */}
+      <div className="w-full max-w-3xl p-6">
+        <div className="bg-white rounded-3xl p-6 shadow-lg border border-gray-200">
+          
+          {/* MULTILINE INPUT */}
+          <textarea
+            className="w-full bg-transparent resize-none outline-none text-gray-700 text-lg leading-relaxed placeholder:text-gray-400"
+            rows={2}
+            placeholder="Ask Lovable to create a landing page..."
+            value={prompt}
+            onChange={(e) => setPrompt(e.target.value)}
+          />
+
+          {/* ACTION BAR */}
+          <div className="flex items-center justify-between mt-4">
+            {/* LEFT BUTTONS */}
+            <div className="flex items-center gap-3 text-gray-500">
+
+              <button className="p-2 cursor-pointer hover:bg-gray-100 rounded-full transition">
+                <Plus size={18} />
+              </button>
+
+              <button className="flex cursor-pointer items-center gap-2 px-3 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-full text-sm transition">
+                <Paperclip size={16} />
+                Attach
+              </button>
+            </div>
+
+            {/* RIGHT BUTTONS */}
+            <div className="flex items-center gap-3">
+              <button className="p-2 cursor-pointer hover:bg-gray-100 rounded-full text-gray-600 transition">
+                <Mic size={18} />
+              </button>
+
+              <Button
+                onClick={handleSubmit}
+                className="rounded-full cursor-pointer h-10 w-10 p-0 flex items-center justify-center bg-black text-white hover:bg-gray-800"
+              >
+                <ArrowUp size={20} />
+              </Button>
+            </div>
+          </div>
+
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+      </div>
     </div>
   );
 }
