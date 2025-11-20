@@ -11,6 +11,9 @@ import React, {
   JSX,
 } from "react";
 
+// Utility for stable IDs
+const uid = () => crypto.randomUUID();
+
 // Type with static InputBar
 type ChatUIType = React.ForwardRefExoticComponent<
   {} & React.RefAttributes<any>
@@ -34,52 +37,73 @@ const ChatUI = forwardRef(function ChatUIComponent(_props, ref) {
   useEffect(scrollToBottom, [messages]);
 
   const handleSend = async (message: string) => {
-  if (!message.trim()) return;
+    if (!message.trim()) return;
 
-  // Add user message
-  setMessages(prev => [...prev, { sender: "user", content: message }]);
+    // 1. Add user message
+    const userMsg = {
+      id: uid(),
+      sender: "user",
+      content: message,
+    };
+    setMessages(prev => [...prev, userMsg]);
 
-  // Add bot placeholder and capture its index safely
-  let botIndex = -1;
-  setMessages(prev => {
-    botIndex = prev.length;        // correct index!
-    return [...prev, { sender: "bot", content: "" }];
-  });
+    // 2. Add bot placeholder with stable ID
+    const botId = uid();
+    setMessages(prev => [...prev, { id: botId, sender: "bot", content: "" }]);
 
-  setIsStreaming(true);
+    setIsStreaming(true);
 
-  const res = await fetch("/api/chat", {
-    method: "POST",
-    body: JSON.stringify({ message }),
-  });
+    const res = await fetch("/api/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message }),
+    });
 
-  const reader = res.body!.getReader();
-  const decoder = new TextDecoder();
+    if (!res.body) {
+      console.error("No stream body returned");
+      return;
+    }
 
-  while (true) {
-    const { done, value } = await reader.read();
-    if (done) break;
+    const reader = res.body.getReader();
+    const decoder = new TextDecoder();
 
-    try {
-      const json = JSON.parse(decoder.decode(value));
+    let buffer = "";
 
-      // Append ONLY to the correct bot bubble
-      setMessages(prev => {
-        const updated = [...prev];
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
 
-        // Protect against re-render indexing mistakes
-        if (updated[botIndex]) {
-          updated[botIndex].content += json.content;
+      buffer += decoder.decode(value, { stream: true });
+
+      // Expect NDJSON lines
+      let newlineIndex;
+      while ((newlineIndex = buffer.indexOf("\n")) !== -1) {
+        const line = buffer.slice(0, newlineIndex).trim();
+        buffer = buffer.slice(newlineIndex + 1);
+
+        if (!line) continue;
+
+        try {
+          const json = JSON.parse(line);
+
+          if (json.content) {
+            // Append only NEW token
+            setMessages(prev =>
+              prev.map(m =>
+                m.id === botId
+                  ? { ...m, content: m.content + json.content }
+                  : m
+              )
+            );
+          }
+        } catch (e) {
+          console.error("JSON parse error:", line,e);
         }
+      }
+    }
 
-        return updated;
-      });
-    } catch {}
-  }
-
-  setIsStreaming(false);
-};
-
+    setIsStreaming(false);
+  };
 
   return (
     <div className="space-y-4">
@@ -89,9 +113,9 @@ const ChatUI = forwardRef(function ChatUIComponent(_props, ref) {
         </div>
       )}
 
-      {messages.map((msg, i) => (
+      {messages.map((msg) => (
         <div
-          key={i}
+          key={msg.id}
           className={`flex ${
             msg.sender === "user" ? "justify-end" : "justify-start"
           }`}
