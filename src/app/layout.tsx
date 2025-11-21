@@ -1,5 +1,5 @@
 import { type Metadata } from "next";
-import { ClerkProvider, SignedIn, UserButton } from "@clerk/nextjs";
+import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
 import { TRPCReactProvider } from "@/trpc/client";
 
@@ -29,11 +29,6 @@ export default function RootLayout({
       <TRPCReactProvider>
         <html lang="en">
           <body className={`${font.className} antialiased`}>
-            <header className="flex justify-end items-center p-4 gap-4 h-16">
-              <SignedIn>
-                <UserButton />
-              </SignedIn>
-            </header>
             <Toaster />
             {children}
           </body>
