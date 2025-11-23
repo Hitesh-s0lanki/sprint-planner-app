@@ -133,6 +133,43 @@
   --sidebar-ring: #818fc3;
 }
 
+.hover-underline-animation::after {
+  content: "";
+  position: absolute;
+  width: 65%;
+  border-radius: 2px;
+  transform: scaleX(0);
+  height: 2.5px;
+  bottom: -7px;
+  left: 10px;
+  background-color: #9b4819;
+  transition: transform 0.25s ease-out;
+}
+
+.link-active::after {
+  content: "";
+  position: absolute;
+  width: 65%;
+  border-radius: 2px;
+  transform: scaleX(1);
+  height: 2.5px;
+  bottom: -7px;
+  left: 10px;
+  background-color: #1d1c24;
+}
+
+.hover-underline-animation:hover::after {
+  transform: scaleX(1);
+}
+
+.hover-underline-animation.center::after {
+  transform-origin: bottom center;
+}
+
+.hover-underline-animation.center:hover::after {
+  transform-origin: bottom center;
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
@@ -140,4 +177,74 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+.hover-underline-animation {
+  display: inline-block;
+  position: relative;
+}
+
+.hover-underline-animation::after {
+  content: "";
+  position: absolute;
+  width: 65%;
+  border-radius: 2px;
+  transform: scaleX(0);
+  height: 2.5px;
+  bottom: -7px;
+  left: 10px;
+  background-color: #1d1c24;
+  transition: transform 0.25s ease-out;
+}
+
+.link-active::after {
+  content: "";
+  position: absolute;
+  width: 65%;
+  border-radius: 2px;
+  transform: scaleX(1);
+  height: 2.5px;
+  bottom: -7px;
+  left: 10px;
+  background-color: #1d1c24;
+}
+
+.hover-underline-animation:hover::after {
+  transform: scaleX(1);
+}
+
+.hover-underline-animation.center::after {
+  transform-origin: bottom center;
+}
+
+.hover-underline-animation.center:hover::after {
+  transform-origin: bottom center;
+}
+
+/* Footer Animations */
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%) skewX(-12deg);
+  }
+  100% {
+    transform: translateX(200%) skewX(-12deg);
+  }
+}
+
+.animate-shimmer {
+  animation: shimmer 3s infinite;
+}
+
+@keyframes gradient {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.animate-gradient {
+  background-size: 200% auto;
+  animation: gradient 3s ease infinite;
 }

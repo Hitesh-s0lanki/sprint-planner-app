@@ -2,13 +2,14 @@ import { type Metadata } from "next";
 import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
 import { TRPCReactProvider } from "@/trpc/client";
-
-import { DM_Sans } from "next/font/google";
 import { Toaster } from "sonner";
 
+import { DM_Sans } from "next/font/google";
+
 const font = DM_Sans({
+  weight: ["400", "500", "600", "700"],
   subsets: ["latin"],
-  weight: ["400", "500", "700"],
+  display: "swap",
   variable: "--font-dm-sans",
 });
 
