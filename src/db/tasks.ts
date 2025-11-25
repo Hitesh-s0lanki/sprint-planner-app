@@ -1,10 +1,8 @@
 import {
   pgTable,
-  serial,
   varchar,
   text,
   timestamp,
-  integer,
   uuid,
   primaryKey,
   pgEnum,
@@ -22,9 +20,9 @@ export const taskStatus = pgEnum("task_status", [
 ]);
 
 export const tasks = pgTable("tasks", {
-  id: serial("id").primaryKey(),
+  id: uuid("id").defaultRandom().primaryKey(),
 
-  projectId: integer("project_id")
+  projectId: uuid("project_id")
     .notNull()
     .references(() => projects.id),
 
@@ -40,7 +38,7 @@ export const tasks = pgTable("tasks", {
   reporterId: uuid("reporter_id").references(() => users.id),
 
   // ⭐ Parent task (nullable) - self-reference
-  parentTaskId: integer("parent_task_id"), // NULL allowed
+  parentTaskId: uuid("parent_task_id"), // NULL allowed
 
   dueDate: timestamp("due_date"),
 
@@ -60,8 +58,8 @@ export const tasksParentTaskFk = foreignKey({
 export const taskDependencies = pgTable(
   "task_dependencies",
   {
-    taskId: integer("task_id").notNull(),
-    dependsOnTaskId: integer("depends_on_task_id").notNull(),
+    taskId: uuid("task_id").notNull(),
+    dependsOnTaskId: uuid("depends_on_task_id").notNull(),
   },
   (table) => ({
     pk: primaryKey({ columns: [table.taskId, table.dependsOnTaskId] }),

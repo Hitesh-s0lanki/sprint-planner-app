@@ -19,7 +19,12 @@ export function GenerateAvatar({
   if (variant === "botttsNeutral") {
     avatar = createAvatar(botttsNeutral, { seed });
   } else {
-    avatar = createAvatar(initials, { seed, fontWeight: 500, fontSize: 42 });
+    avatar = createAvatar(initials, {
+      seed,
+      fontWeight: 500,
+      fontSize: 42,
+      backgroundColor: ["1e2235", "2a3047", "3a4160"],
+    });
   }
   return (
     <Avatar className={className}>

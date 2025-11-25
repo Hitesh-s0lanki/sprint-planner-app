@@ -79,14 +79,18 @@
   --chart-4: oklch(0.78 0.06 265);
   --chart-5: oklch(0.91 0.04 255);
 
-  --sidebar: oklch(0.99 0.01 255);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.55 0.09 256);
-  --sidebar-primary-foreground: oklch(0.99 0.01 255);
-  --sidebar-accent: oklch(0.78 0.06 265);
-  --sidebar-accent-foreground: oklch(0.145 0 0);
-  --sidebar-border: oklch(0.91 0.04 255);
-  --sidebar-ring: oklch(0.55 0.09 256);
+  --sidebar: oklch(0.214 0.014 285); /* base #1d1c24 */
+  --sidebar-foreground: oklch(
+    0.92 0.02 285
+  ); /* light text with slight violet tint */
+  --sidebar-primary: oklch(0.35 0.04 285); /* slightly lighter violet-gray */
+  --sidebar-primary-foreground: oklch(
+    0.98 0.01 285
+  ); /* off-white with slight tint */
+  --sidebar-accent: oklch(0.28 0.02 285); /* soft accent */
+  --sidebar-accent-foreground: oklch(0.95 0.02 285); /* light foreground */
+  --sidebar-border: oklch(0.32 0.008 285); /* border slightly lighter */
+  --sidebar-ring: oklch(0.4 0.045 285); /* focus ring */
 }
 
 .dark {
@@ -123,14 +127,18 @@
   --chart-4: #9fabc6;
   --chart-5: #a2a9c7;
 
-  --sidebar: #2a3047;
-  --sidebar-foreground: #f8fbff;
-  --sidebar-primary: #818fc3;
-  --sidebar-primary-foreground: #1a1a1a;
-  --sidebar-accent: #3a4160;
-  --sidebar-accent-foreground: #f8fbff;
-  --sidebar-border: #3c4362;
-  --sidebar-ring: #818fc3;
+  --sidebar: oklch(0.214 0.014 285); /* base #1d1c24 */
+  --sidebar-foreground: oklch(
+    0.92 0.02 285
+  ); /* light text with slight violet tint */
+  --sidebar-primary: oklch(0.35 0.04 285); /* slightly lighter violet-gray */
+  --sidebar-primary-foreground: oklch(
+    0.98 0.01 285
+  ); /* off-white with slight tint */
+  --sidebar-accent: oklch(0.28 0.02 285); /* soft accent */
+  --sidebar-accent-foreground: oklch(0.95 0.02 285); /* light foreground */
+  --sidebar-border: oklch(0.32 0.008 285); /* border slightly lighter */
+  --sidebar-ring: oklch(0.4 0.045 285); /* focus ring */
 }
 
 .hover-underline-animation::after {
@@ -236,7 +244,8 @@
 }
 
 @keyframes gradient {
-  0%, 100% {
+  0%,
+  100% {
     background-position: 0% 50%;
   }
   50% {

@@ -80,19 +80,25 @@ export function UserButton() {
             <DrawerDescription>{getUserEmail()}</DrawerDescription>
           </DrawerHeader>
           <DrawerFooter>
-            <Button variant="outline" onClick={onBilling}>
+            <Button variant="outline" onClick={() => router.push("/app")}>
               <LayoutDashboard className="size-4 mr-2" />
               Dashboard
             </Button>
-            <Button variant="outline" onClick={onBilling}>
+            <Button
+              variant="outline"
+              onClick={() => router.push("/app/settings")}
+            >
               <Settings className="size-4 mr-2" />
               Settings
             </Button>
-            <Button variant="outline" onClick={onBilling}>
+            <Button
+              variant="outline"
+              onClick={() => router.push("/app/billing")}
+            >
               <CreditCard className="size-4 mr-2" />
               Billing
             </Button>
-            <Button variant="outline" onClick={onLogout}>
+            <Button variant="outline" onClick={() => signOut()}>
               <LogOut className="size-4 mr-2" />
               Logout
             </Button>
@@ -108,7 +114,7 @@ export function UserButton() {
         <GenerateAvatar
           seed={getUserName()}
           variant="initials"
-          className="size-9"
+          className="size-8"
         />
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" side="bottom" className="w-72">
@@ -132,7 +138,7 @@ export function UserButton() {
           className="flex cursor-pointer items-center justify-between"
           onClick={() => router.push("/app")}
         >
-          Dashboard
+          Home
           <LayoutDashboard className="size-4" />
         </DropdownMenuItem>
 

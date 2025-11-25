@@ -4,17 +4,7 @@ import { ArrowRight, Clock, Archive, Activity } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
-
-export type Project = {
-  id: number;
-  key: string;
-  name: string;
-  description?: string;
-  status: "active" | "inactive" | "archived";
-  leadUserId: string;
-  createdAt: Date;
-  updatedAt: Date;
-};
+import type { Project } from "@/modules/projects/types";
 
 // Helper function to format time ago
 export const formatTimeAgo = (date: Date): string => {
@@ -69,7 +59,7 @@ const getGradientForProject = (index: number) => {
 type ProjectCardProps = {
   project: Project;
   index: number;
-  onClick: (projectId: number) => void;
+  onClick: (projectId: string) => void;
 };
 
 export function ProjectCard({ project, index, onClick }: ProjectCardProps) {

@@ -1,6 +1,5 @@
 import {
   pgTable,
-  serial,
   varchar,
   text,
   timestamp,
@@ -16,7 +15,7 @@ export const projectStatus = pgEnum("project_status", [
 ]);
 
 export const projects = pgTable("projects", {
-  id: serial("id").primaryKey(),
+  id: uuid("id").defaultRandom().primaryKey(),
   key: varchar("key", { length: 50 }).notNull().unique(),
   name: varchar("name", { length: 256 }).notNull(),
   description: text("description"),

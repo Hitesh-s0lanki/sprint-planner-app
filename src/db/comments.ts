@@ -1,21 +1,13 @@
-import {
-  pgTable,
-  serial,
-  text,
-  timestamp,
-  integer,
-  pgEnum,
-  uuid,
-} from "drizzle-orm/pg-core";
+import { pgTable, text, timestamp, pgEnum, uuid } from "drizzle-orm/pg-core";
 import { users } from "./users";
 import { tasks } from "./tasks";
 
 export const commentRole = pgEnum("comment_role", ["ai", "user"]);
 
 export const comments = pgTable("comments", {
-  id: serial("id").primaryKey(),
+  id: uuid("id").defaultRandom().primaryKey(),
   role: commentRole("role").notNull().default("user"),
-  taskId: integer("task_id")
+  taskId: uuid("task_id")
     .notNull()
     .references(() => tasks.id),
   // 🔴 must be uuid to match users.id

@@ -14,7 +14,7 @@ export function ProjectsLoadingView() {
           <CreateProjectCard onClick={() => {}} />
 
           {/* Loading skeletons */}
-          {Array.from({ length: 6 }).map((_, index) => (
+          {Array.from({ length: 4 }).map((_, index) => (
             <div
               key={index}
               className="relative overflow-hidden rounded-2xl border bg-card/50 backdrop-blur-sm"

@@ -13,7 +13,7 @@ export default function AppComponent() {
 
   const { data } = useSuspenseQuery(trpc.projects.getAll.queryOptions());
 
-  const handleProjectClick = (projectId: number) => {
+  const handleProjectClick = (projectId: string) => {
     router.push(`/app/${projectId}`);
   };
 
@@ -24,7 +24,6 @@ export default function AppComponent() {
 
   const projects = (data.data?.items || []).map((project) => ({
     ...project,
-    description: project.description ?? undefined,
     createdAt: new Date(project.createdAt),
     updatedAt: new Date(project.updatedAt),
   }));
