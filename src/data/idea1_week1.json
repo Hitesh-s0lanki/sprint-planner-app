@@ -1,0 +1,46 @@
+[
+  {
+    "title": "Conduct Student Interviews",
+    "description": "Talk to 20 students and collect insights on study habits, revision patterns, and weak areas.",
+    "priority": "High",
+    "assigneeId": "U001",
+    "ai_description": "Builds the base learning dataset for recommendation logic."
+  },
+  {
+    "title": "Define Adaptive Engine Rules",
+    "description": "Create a flowchart showing difficulty adjustment rules, weak-topic detection, and spaced-revision logic.",
+    "priority": "High",
+    "assigneeId": "U002",
+    "ai_description": "Defines how the AI responds to user performance."
+  },
+  {
+    "title": "Break Subjects into Micro-Modules",
+    "description": "Convert DSA/DBMS into small topics with outcomes and sample questions.",
+    "priority": "Medium",
+    "assigneeId": "U003",
+    "ai_description": "Gives structured units for AI-driven recommendations."
+  },
+  {
+    "title": "Design Initial UI Wireframes",
+    "description": "Prepare wireframes for dashboard, quiz flow, and progress tracking.",
+    "priority": "Medium",
+    "assigneeId": "U004",
+    "ai_description": "Ensures clear UX before development starts."
+  },
+
+  {
+    "title": "Validate Market Need",
+    "description": "Summarize student problems and show demand for personalization with real interview data.",
+    "priority": "High",
+    "assigneeId": "I001",
+    "ai_description": "Gives investors early proof that the problem is real."
+  },
+  {
+    "title": "Competitive Gap Analysis",
+    "description": "Analyze 5 existing EdTech apps and highlight gaps EduNex uniquely solves.",
+    "priority": "Medium",
+    "assigneeId": "I002",
+    "ai_description": "Shows investors differentiation and opportunity size."
+  }
+
+]
