@@ -15,8 +15,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import { GenerateAvatar } from "@/components/ui/generate-avatar";
 
 const Navbar = () => {
   const pathname = usePathname();
@@ -37,25 +37,14 @@ const Navbar = () => {
     router.push("/");
   };
 
-  const getUserInitials = () => {
-    if (!user) return "U";
-    const firstName = user.firstName || "";
-    const lastName = user.lastName || "";
-    if (firstName && lastName) {
-      return `${firstName[0]}${lastName[0]}`.toUpperCase();
-    }
-    if (firstName) return firstName[0].toUpperCase();
-    if (user.emailAddresses[0]?.emailAddress) {
-      return user.emailAddresses[0].emailAddress[0].toUpperCase();
-    }
-    return "U";
-  };
-
   return (
     <>
       <nav className="w-full flex justify-between items-center p-4 md:p-6 md:px-10 lg:px-40">
         {/* Logo Section */}
-        <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
+        <Link
+          href="/"
+          className="flex items-center gap-2 hover:opacity-80 transition-opacity"
+        >
           <Image
             src="/logo.svg"
             alt="logo"
@@ -93,21 +82,17 @@ const Navbar = () => {
                   variant="ghost"
                   className="flex items-center gap-2 h-auto p-1.5 rounded-full hover:bg-slate-100"
                 >
-                  <Avatar className="h-8 w-8">
-                    <AvatarImage
-                      src={user?.imageUrl}
-                      alt={user?.fullName || "User"}
-                    />
-                    <AvatarFallback className="bg-primary text-primary-foreground text-xs font-semibold">
-                      {getUserInitials()}
-                    </AvatarFallback>
-                  </Avatar>
+                  <GenerateAvatar
+                    seed={user?.fullName || ""}
+                    variant="initials"
+                    className="size-9"
+                  />
                   <ChevronDown className="h-4 w-4 text-slate-600" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-48">
                 <DropdownMenuItem
-                  onClick={() => router.push("/dashboard")}
+                  onClick={() => router.push("/app")}
                   className="cursor-pointer"
                 >
                   <LayoutDashboard className="h-4 w-4 mr-2" />
@@ -137,20 +122,16 @@ const Navbar = () => {
                   variant="ghost"
                   className="flex items-center gap-1.5 h-auto p-1.5 rounded-full hover:bg-neutral-100"
                 >
-                  <Avatar className="h-8 w-8">
-                    <AvatarImage
-                      src={user?.imageUrl}
-                      alt={user?.fullName || "User"}
-                    />
-                    <AvatarFallback className="bg-primary text-primary-foreground text-xs font-semibold">
-                      {getUserInitials()}
-                    </AvatarFallback>
-                  </Avatar>
+                  <GenerateAvatar
+                    seed={user?.fullName || ""}
+                    variant="initials"
+                    className="size-9"
+                  />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-48">
                 <DropdownMenuItem
-                  onClick={() => router.push("/dashboard")}
+                  onClick={() => router.push("/app")}
                   className="cursor-pointer"
                 >
                   <LayoutDashboard className="h-4 w-4 mr-2" />
