@@ -1,15 +1,8 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import {
-  ChevronDown,
-  CreditCard,
-  LayoutDashboard,
-  LogOut,
-  Settings,
-} from "lucide-react";
+import { LayoutDashboard, LogOut, Settings, User } from "lucide-react";
 import { useUser, useClerk } from "@clerk/nextjs";
-import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { GenerateAvatar } from "@/components/ui/generate-avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -59,11 +52,6 @@ export function UserButton() {
     router.push("/");
   };
 
-  const onBilling = () => {
-    // Add billing navigation logic here
-    router.push("/billing");
-  };
-
   if (isMobile) {
     return (
       <Drawer>
@@ -90,13 +78,6 @@ export function UserButton() {
             >
               <Settings className="size-4 mr-2" />
               Settings
-            </Button>
-            <Button
-              variant="outline"
-              onClick={() => router.push("/app/billing")}
-            >
-              <CreditCard className="size-4 mr-2" />
-              Billing
             </Button>
             <Button variant="outline" onClick={() => signOut()}>
               <LogOut className="size-4 mr-2" />
@@ -152,10 +133,10 @@ export function UserButton() {
         <DropdownMenuSeparator />
         <DropdownMenuItem
           className="flex cursor-pointer items-center justify-between"
-          onClick={onBilling}
+          onClick={() => router.push("/app/settings")}
         >
-          Billing
-          <CreditCard className="size-4" />
+          Profile
+          <User className="size-4" />
         </DropdownMenuItem>
         <DropdownMenuItem
           className="flex cursor-pointer items-center justify-between"

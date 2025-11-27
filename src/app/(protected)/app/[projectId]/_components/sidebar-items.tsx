@@ -2,11 +2,18 @@
 
 import { useParams, usePathname } from "next/navigation";
 import Link from "next/link";
-import { LayoutDashboard, FileText, Database, Share2 } from "lucide-react";
+import {
+  LayoutDashboard,
+  FileText,
+  Database,
+  Share2,
+  List,
+} from "lucide-react";
 import {
   SidebarMenu,
   SidebarMenuItem,
   SidebarMenuButton,
+  useSidebar,
 } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
 
@@ -15,6 +22,13 @@ const navigationItems = [
     title: "Home",
     icon: LayoutDashboard,
     href: (projectId: string) => `/app/${projectId}`,
+    color: "text-sidebar-primary-foreground",
+  },
+  // add borad link
+  {
+    title: "Board",
+    icon: List,
+    href: (projectId: string) => `/app/${projectId}/board`,
     color: "text-sidebar-primary-foreground",
   },
   {
@@ -42,15 +56,17 @@ export function SidebarItems() {
   const pathname = usePathname();
   const projectId = params?.projectId as string;
 
+  const { open } = useSidebar();
+
   return (
     <SidebarMenu className="px-2 py-2">
       {navigationItems.map((item) => {
         const href = item.href(projectId);
-        const isActive = pathname === href || pathname.startsWith(`${href}/`);
+        const isActive = pathname === href;
         const Icon = item.icon;
 
         return (
-          <SidebarMenuItem key={item.title} className="px-2">
+          <SidebarMenuItem key={item.title} className={cn(open && "px-2")}>
             <SidebarMenuButton
               asChild
               isActive={isActive}

@@ -8,6 +8,7 @@ import {
   SidebarMenuItem,
   SidebarMenuButton,
   SidebarFooter as UISidebarFooter,
+  useSidebar,
 } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
 
@@ -15,7 +16,7 @@ const footerItems = [
   {
     title: "Help Center",
     icon: HelpCircle,
-    href: (projectId: string) => `/app/${projectId}/help`,
+    href: () => `/contact`,
     color: "text-sidebar-primary-foreground",
   },
   {
@@ -31,8 +32,10 @@ export function SidebarFooter() {
   const pathname = usePathname();
   const projectId = params?.projectId as string;
 
+  const { open } = useSidebar();
+
   return (
-    <UISidebarFooter className="border-t border-sidebar-border/50 bg-gradient-to-t from-sidebar via-sidebar to-sidebar-accent/5">
+    <UISidebarFooter className="border-t border-sidebar-border/50 bg-linear-to-t from-sidebar via-sidebar to-sidebar-accent/5">
       <SidebarMenu className="px-2 py-2">
         {footerItems.map((item) => {
           const href = item.href(projectId);
@@ -40,7 +43,7 @@ export function SidebarFooter() {
           const Icon = item.icon;
 
           return (
-            <SidebarMenuItem key={item.title} className="px-2">
+            <SidebarMenuItem key={item.title} className={cn(open && "px-2")}>
               <SidebarMenuButton
                 asChild
                 isActive={isActive}

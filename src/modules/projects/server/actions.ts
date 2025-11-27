@@ -32,3 +32,23 @@ export async function getAllProjects(userId?: string) {
     throw new Error("Failed to fetch projects");
   }
 }
+
+/**
+ * Get a project by ID from the database
+ * @param projectId - The project ID to fetch
+ * @returns Project or null if not found
+ */
+export async function getProjectById(projectId: string) {
+  try {
+    const project = await db
+      .select()
+      .from(projects)
+      .where(eq(projects.id, projectId))
+      .limit(1);
+
+    return project[0] || null;
+  } catch (error) {
+    console.error("Error fetching project by ID:", error);
+    throw new Error("Failed to fetch project");
+  }
+}

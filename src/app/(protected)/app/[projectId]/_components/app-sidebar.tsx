@@ -5,7 +5,6 @@ import {
   SidebarContent,
   SidebarProvider,
   SidebarInset,
-  SidebarSeparator,
 } from "@/components/ui/sidebar";
 import { SidebarHeader } from "./sidebar-header";
 import { SidebarItems } from "./sidebar-items";
