@@ -1,0 +1,42 @@
+[
+  {
+    "title": "Build Quiz Engine",
+    "description": "Create the quiz module with difficulty levels, scoring logic, and ability to record user responses and time-taken.",
+    "priority": "High",
+    "assigneeId": "U006",
+    "ai_description": "Generates the performance data required for personalization.",
+    "type": "user"
+  },
+  {
+    "title": "Implement Weak Topic Detection",
+    "description": "Write logic to calculate topic-wise accuracy and automatically flag weak areas using predefined thresholds.",
+    "priority": "High",
+    "assigneeId": "U002",
+    "ai_description": "Allows the adaptive system to recommend revision tasks.",
+    "type": "user"
+  },
+  {
+    "title": "Create Performance Event Tracking",
+    "description": "Set up event logging for question correctness, time per question, topic-switching, and quiz completion for each attempt.",
+    "priority": "High",
+    "assigneeId": "U005",
+    "ai_description": "Feeds structured learning data into the system.",
+    "type": "user"
+  },
+  {
+    "title": "Define MVP Success Metrics",
+    "description": "Create a list of KPIs such as accuracy improvement, weekly activity, quiz completion rate, and retention to measure MVP traction.",
+    "priority": "High",
+    "assigneeId": "I003",
+    "ai_description": "Gives investors a measurable way to judge early performance.",
+    "type": "investor"
+  },
+  {
+    "title": "Prepare Early Pilot Outreach Plan",
+    "description": "Identify initial colleges or student groups and prepare a pitch brief for onboarding them into the beta testing phase.",
+    "priority": "Medium",
+    "assigneeId": "I004",
+    "ai_description": "Shows investors the early adoption and outreach strategy.",
+    "type": "investor"
+  }
+]
