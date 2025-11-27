@@ -22,3 +22,39 @@ export async function getUserByClerkId(clerkId: string) {
   }
 }
 
+/**
+ * Update user profile
+ * @param clerkId - Clerk user ID
+ * @param data - User profile data to update (name, description, profession)
+ * @returns Updated user object
+ */
+export async function updateUserProfile(
+  clerkId: string,
+  data: {
+    name?: string;
+    description?: string;
+    profession?: string;
+  }
+) {
+  try {
+    const [updatedUser] = await db
+      .update(users)
+      .set({
+        ...(data.name !== undefined && { name: data.name }),
+        ...(data.description !== undefined && { description: data.description }),
+        ...(data.profession !== undefined && { profession: data.profession }),
+      })
+      .where(eq(users.clerkId, clerkId))
+      .returning();
+
+    if (!updatedUser) {
+      throw new Error("User not found");
+    }
+
+    return updatedUser;
+  } catch (error) {
+    console.error("Error updating user profile:", error);
+    throw new Error("Failed to update user profile");
+  }
+}
+
