@@ -56,6 +56,8 @@ const getGradientForProject = (index: number) => {
   return gradients[index % gradients.length];
 };
 
+const DUMMY_PROJECT_ID = "70317580-3bc3-4b88-83ff-7497c8d343ff";
+
 type ProjectCardProps = {
   project: Project;
   index: number;
@@ -90,17 +92,27 @@ export function ProjectCard({ project, index, onClick }: ProjectCardProps) {
         {/* Header */}
         <div className="mb-4">
           <div className="mb-2 flex items-center justify-between gap-2">
-            <Badge
-              variant={project.status === "active" ? "default" : "outline"}
-              className={cn(
-                "text-[10px] font-medium",
-                project.status === "active" &&
-                  "bg-linear-to-r from-emerald-500/10 to-teal-500/10 border-emerald-500/20  dark:text-emerald-400 text-white"
+            <div className="flex items-center gap-2">
+              <Badge
+                variant={project.status === "active" ? "default" : "outline"}
+                className={cn(
+                  "text-[10px] font-medium",
+                  project.status === "active" &&
+                    "bg-linear-to-r from-emerald-500/10 to-teal-500/10 border-emerald-500/20  dark:text-emerald-400 text-white"
+                )}
+              >
+                {getStatusIcon(project.status)}
+                <span className="ml-1 capitalize">{project.status}</span>
+              </Badge>
+              {project.id === DUMMY_PROJECT_ID && (
+                <Badge
+                  variant="outline"
+                  className="text-[10px] font-medium bg-amber-500/10 border-amber-500/20 text-amber-500 dark:text-amber-400"
+                >
+                  dummy
+                </Badge>
               )}
-            >
-              {getStatusIcon(project.status)}
-              <span className="ml-1 capitalize">{project.status}</span>
-            </Badge>
+            </div>
             <div
               className={cn(
                 "h-2 w-2 rounded-full animate-pulse",
