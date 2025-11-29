@@ -3,7 +3,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
 import { TRPCReactProvider } from "@/trpc/client";
 import { Toaster } from "sonner";
-
+import { Analytics } from "@vercel/analytics/next";
 import { DM_Sans } from "next/font/google";
 
 const font = DM_Sans({
@@ -32,6 +32,7 @@ export default function RootLayout({
           <body className={`${font.className} antialiased`}>
             <Toaster />
             {children}
+            <Analytics />
           </body>
         </html>
       </TRPCReactProvider>
