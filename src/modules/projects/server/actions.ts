@@ -1,6 +1,8 @@
 import { db } from "@/lib/db";
 import { projects } from "@/db/projects";
-import { eq, desc } from "drizzle-orm";
+import { eq, desc, or } from "drizzle-orm";
+
+const DUMMY_PROJECT_ID = "70317580-3bc3-4b88-83ff-7497c8d343ff";
 
 /**
  * Get all projects from the database
@@ -9,22 +11,44 @@ import { eq, desc } from "drizzle-orm";
  */
 export async function getAllProjects(userId?: string) {
   try {
+    let allProjects;
+    
     if (userId) {
-      // Get projects where the user is the lead, ordered by most recently updated
-      const allProjects = await db
+      // Get projects where the user is the lead OR the dummy project, ordered by most recently updated
+      allProjects = await db
         .select()
         .from(projects)
-        .where(eq(projects.leadUserId, userId))
+        .where(
+          or(
+            eq(projects.leadUserId, userId),
+            eq(projects.id, DUMMY_PROJECT_ID)
+          )
+        )
         .orderBy(desc(projects.updatedAt));
-
-      return allProjects;
+    } else {
+      // Get all projects if no userId is provided, ordered by most recently updated
+      allProjects = await db
+        .select()
+        .from(projects)
+        .orderBy(desc(projects.updatedAt));
     }
 
-    // Get all projects if no userId is provided, ordered by most recently updated
-    const allProjects = await db
-      .select()
-      .from(projects)
-      .orderBy(desc(projects.updatedAt));
+    // Ensure dummy project is always included
+    const hasDummyProject = allProjects.some((p) => p.id === DUMMY_PROJECT_ID);
+    
+    if (!hasDummyProject) {
+      // Try to fetch the dummy project
+      const dummyProject = await db
+        .select()
+        .from(projects)
+        .where(eq(projects.id, DUMMY_PROJECT_ID))
+        .limit(1);
+      
+      if (dummyProject.length > 0) {
+        // Add dummy project to the beginning of the array
+        allProjects = [dummyProject[0], ...allProjects];
+      }
+    }
 
     return allProjects;
   } catch (error) {

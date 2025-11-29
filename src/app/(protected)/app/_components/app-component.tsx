@@ -18,8 +18,7 @@ export default function AppComponent() {
   };
 
   const handleCreateProject = () => {
-    // TODO: Implement create project functionality
-    console.log("Create project clicked");
+    router.push("/ideas");
   };
 
   const projects = (data.data?.items || []).map((project) => ({

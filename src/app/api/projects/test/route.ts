@@ -34,8 +34,9 @@ export async function GET() {
       .insert(projects)
       .values({
         key: projectKey,
-        name: "Test Project",
-        description: "This is a test project created via API",
+        name: "Brix",
+        description:
+          "A full-stack home construction company offering on-time delivery, 10-year warranty, and build-now-pay-later using standardized plans and generative AI.",
         status: "active",
         leadUserId: user.id,
       })
@@ -54,4 +55,3 @@ export async function GET() {
     );
   }
 }
-
