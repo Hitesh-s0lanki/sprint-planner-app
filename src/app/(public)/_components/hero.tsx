@@ -3,8 +3,11 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ArrowRight, Sparkles, Rocket } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 const Hero = () => {
+  const router = useRouter();
+
   return (
     <section className="relative w-full min-h-screen border-b bg-linear-to-b from-background via-white to-[#c9d4f3]">
       <div className="flex max-w-full flex-col items-center gap-10 px-4 py-8 sm:py-12 md:flex-row md:gap-14 md:py-20 md:px-10 lg:px-40 lg:py-24">
@@ -35,7 +38,12 @@ const Hero = () => {
 
           {/* Call to Action Buttons */}
           <div className="flex flex-col sm:flex-row flex-wrap justify-center gap-3 pt-2 md:justify-start">
-            <Button className="gap-2 rounded-full bg-primary px-6 py-2.5 text-sm font-medium text-primary-foreground hover:bg-primary/90 w-full sm:w-auto shadow-sm">
+            <Button
+              className="gap-2 rounded-full bg-primary px-6 py-2.5 text-sm font-medium text-primary-foreground hover:bg-primary/90 w-full sm:w-auto shadow-sm"
+              onClick={() => {
+                router.push("/ideas");
+              }}
+            >
               Start your first venture
               <ArrowRight className="h-4 w-4" />
             </Button>

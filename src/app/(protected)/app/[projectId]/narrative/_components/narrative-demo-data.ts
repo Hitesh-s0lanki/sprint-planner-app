@@ -26,51 +26,26 @@ export const demoNarrative: Record<NarrativeCategory, NarrativeSection[]> = {
       category: "narrative",
       name: "Executive Summary",
       type: "text",
-      content: `# Executive Summary
-
-SprintPlanner is a **4-week venture execution system** that turns fuzzy ideas into structured, shippable projects.
-
-- Target users: founders, PMs, tech leads
-- Core value: connect *narrative → board → execution*
-- Time horizon: intense 4-week sprints with clear outcomes`,
+      content:
+        "# Executive Summary\nBrix is a full-stack home construction platform combining standardized architectural plans, AI-driven planning automation, real-time progress monitoring, and build-now-pay-later (BNPL) financing. It solves India's core construction problems—delays, cost overruns, poor supervision, and lack of trust—by offering predictable delivery, transparent pricing, and a 10-year structural warranty. The first MVP focuses on automated planning, cost estimation, and monitoring mockups.",
       position: 0,
     },
     {
       id: "n2",
       category: "narrative",
-      name: "Press Release (PR-Style)",
+      name: "PR-Style Launch",
       type: "text",
-      content: `# Press Release — SprintPlanner Launch
-
-**FOR IMMEDIATE RELEASE**
-
-SprintPlanner today announced the launch of its **4-week venture execution platform**, helping founders and teams go from idea to shipped MVP with clarity and speed.
-
-> “Most tools track tasks. SprintPlanner tracks *narratives*,” said the founding team.
-
-Key highlights:
-- Narrative-first planning
-- Kanban board, list, and timeline views
-- Investor- and stakeholder-ready documentation out of the box.`,
+      content:
+        "# PR-Style Launch\n**Introducing Brix: India's first tech-led home construction platform with on-time delivery and BNPL financing.**\nBrix empowers landowners to build homes confidently through AI-generated project plans, transparent pricing, and real-time execution visibility. With standardized designs and quality assurance baked into every step, Brix aims to redefine trust and efficiency in construction.",
       position: 1,
     },
     {
       id: "n3",
       category: "narrative",
-      name: "Customer FAQ (Working Backwards FAQ)",
+      name: "Customer FAQ",
       type: "text",
-      content: `# Customer FAQ
-
-## Q: Who is SprintPlanner for?
-Founders, PMs, and tech leaders running **4–6 week product cycles**.
-
-## Q: What problem does it solve?
-It removes the gap between *strategic docs* and *execution boards*, so teams don't lose context once "work starts".
-
-## Q: How is this different from Jira / Linear / Notion?
-- Jira/Linear: great for tickets, less opinionated about narrative.
-- Notion: great for docs, weak on structured execution.
-- **SprintPlanner**: binds narrative, board, and metrics into one 4-week system.`,
+      content:
+        "# Customer FAQ\n**Q: How does Brix guarantee on-time delivery?**\n- Standardized workflows, vetted partners, and milestone tracking.\n\n**Q: What is BNPL for construction?**\n- Eligible landowners can start building now and pay in structured installments.\n\n**Q: How is quality ensured?**\n- Fixed material specs, daily progress logs, milestone-based checks.",
       position: 2,
     },
     {
@@ -78,22 +53,8 @@ It removes the gap between *strategic docs* and *execution boards*, so teams don
       category: "narrative",
       name: "Problem Statement",
       type: "text",
-      content: `# Problem Statement
-
-Teams struggle to **turn ideas into focused 4-week execution plans**.
-
-## The Core Issues
-
-- Strategy and execution are split across tools
-- No single source of truth for “what are we doing this sprint and why?”
-- Investor or stakeholder narratives are written *after* execution, not before
-
-## Why It Matters
-
-This leads to:
-- Misaligned expectations
-- Scope creep
-- Wasted engineering capacity`,
+      content:
+        "# Problem Statement\nIndia’s home construction ecosystem is fragmented and unreliable. Customers face:\n- Lack of trustworthy contractors\n- Hidden costs and overruns\n- Delays due to poor coordination\n- No real-time visibility\n- Limited financing options\nThese gaps create anxiety and inefficiency for landowners.",
       position: 3,
     },
     {
@@ -101,65 +62,18 @@ This leads to:
       category: "narrative",
       name: "Solution Overview",
       type: "text",
-      content: `# Solution Overview
-
-SprintPlanner is a **narrative-first sprint OS**.
-
-## Core Concepts
-
-1. **Narrative Sections** — Problem, Solution, Metrics, Risks, etc.
-2. **Execution Board** — List, Board, Timeline views mapped to that narrative.
-3. **Investor-Ready Story** — Always up-to-date docs for review.
-
-## Impact
-
-- Faster alignment across product, eng, and founders
-- Clear “definition of done” for each 4-week sprint
-- Easy storytelling for updates, funding, and reviews`,
+      content:
+        "# Solution Overview\nBrix delivers predictable, transparent construction through:\n- **Standardized plans** with clear cost and timeline\n- **AI-driven planning** that generates a detailed execution blueprint\n- **Real-time monitoring dashboard** with mock CCTV/API integrations\n- **10-year structural warranty**\n- **BNPL financing** for affordability",
       position: 4,
     },
     {
       id: "n6",
       category: "narrative",
-      name: "Success Metrics & Goals",
+      name: "Success Metrics",
       type: "text",
-      content: `# Success Metrics & Key Goals
-
-We focus on **input metrics**, not vanity outputs.
-
-## Example 4-week goals
-
-- 80% of tasks linked to a narrative section
-- < 10% tasks without clear owner
-- Weekly narrative update sent to stakeholders
-
-## North Star
-
-> % of teams that complete a full 4-week sprint with clear narrative → board → review cycle.`,
+      content:
+        "# Success Metrics\n- **10 qualified leads** within first month\n- **2 signed projects** in pilot phase\n- **3 vendor partners** onboarded\n- **AI planning accuracy > 80%** (timeline + costing)\n- **Landing page conversion ≥ 5%**",
       position: 5,
-    },
-    {
-      id: "n7",
-      category: "narrative",
-      name: "Implementation Plan",
-      type: "text",
-      content: `# Implementation Plan
-
-1. MVP:
-   - Narrative editor
-   - Board + list + timeline views
-   - Basic investor/social narrative export
-
-2. v1:
-   - Templates for founders / agencies
-   - Collaborator roles and permissions
-   - Simple progress analytics
-
-3. v2:
-   - AI-assisted narrative creation
-   - Automated weekly investor updates
-   - Deeper integrations (GitHub, Linear, Slack)`,
-      position: 6,
     },
   ],
 
@@ -169,17 +83,8 @@ We focus on **input metrics**, not vanity outputs.
       category: "product",
       name: "Product Vision",
       type: "text",
-      content: `# Product Vision
-
-To become the **default 4-week venture execution tool** for founders and small product teams.
-
-## Mission
-
-Help teams:
-- Start with narrative
-- Plan with clarity
-- Execute with focus
-- Communicate with confidence.`,
+      content:
+        "# Product Vision\nTo build India's most trusted, technology-first construction platform where homes are delivered predictably, transparently, and affordably. Brix becomes the digital backbone of physical construction—standardizing execution while enhancing visibility and financing flexibility.",
       position: 0,
     },
     {
@@ -187,31 +92,17 @@ Help teams:
       category: "product",
       name: "User Personas",
       type: "text",
-      content: `# User Personas
-
-## Primary: Founder / Solo Builder
-
-- Needs: Clarity on what to build in 4 weeks
-- Pain: Overwhelm, scattered notes, no clear plan
-
-## Secondary: Product Manager / Startup PM
-
-- Needs: Narrative plus execution in one place
-- Pain: Context loss between docs and tickets`,
+      content:
+        "# User Personas\n### 1. Urban Landowner\n- Wants to build on family land.\n- Frustrated with unreliable contractors.\n- Needs predictable timelines and financing.\n\n### 2. NRI Owner\n- Remote, needs transparency.\n- Requires live updates, warranty, trust.\n\n### 3. Small Builder/Contractor\n- Wants access to standard templates + workflow tools.",
       position: 1,
     },
     {
       id: "p3",
       category: "product",
-      name: "Customer Problems & Insights",
+      name: "Customer Problems",
       type: "text",
-      content: `# Customer Problems & Insights
-
-From early interviews:
-
-- “Notion is where I think, Jira is where I execute — they never stay in sync.”
-- “I write a pitch once, then the board drifts away from it.”
-- “Investors ask for updates and I have to manually reconstruct the story.”`,
+      content:
+        "# Customer Problems\n- No visibility on actual progress\n- Unpredictable pricing and overruns\n- Lack of professional project management\n- No financing support\n- Quality inconsistencies",
       position: 2,
     },
     {
@@ -219,12 +110,8 @@ From early interviews:
       category: "product",
       name: "Feature Breakdown (MVP)",
       type: "text",
-      content: `# Feature Breakdown — MVP
-
-1. Narrative sections with markdown support
-2. Board/List/Timeline views for tasks
-3. Per-project navigation: Dashboard, Narrative, Sources, Social
-4. Simple investor/social export from narrative`,
+      content:
+        "# Feature Breakdown (MVP)\n- **AI Planning Engine:** Generates timeline, materials, and cost.\n- **Standard Plan Library:** 5–10 ready architectural templates.\n- **Monitoring Mock Dashboard:** Milestones, progress %, mock data feed.\n- **Financing Eligibility Flow:** Rules-based affordability scoring.\n- **Lead Capture System:** Form + admin review panel.",
       position: 3,
     },
     {
@@ -232,13 +119,8 @@ From early interviews:
       category: "product",
       name: "Success Criteria",
       type: "text",
-      content: `# Success Criteria
-
-For the first 10 active teams:
-
-- Complete at least one 4-week narrative
-- Create > 30 tasks tied to that narrative
-- Use narrative export at least once for an update or pitch.`,
+      content:
+        "# Success Criteria\n- Users generate a full plan in < 2 minutes\n- Cost estimate accuracy within ±10%\n- Dashboard clearly communicates progress stages\n- Financing decision flow completes in < 45 seconds",
       position: 4,
     },
   ],
@@ -249,24 +131,8 @@ For the first 10 active teams:
       category: "engineering",
       name: "Tech Stack",
       type: "text",
-      content: `# Tech Stack
-
-## Frontend
-- Next.js App Router
-- React
-- TypeScript
-- Tailwind CSS
-- ShadCN UI
-
-## Backend
-- tRPC
-- Drizzle ORM
-- PostgreSQL (Neon)
-
-## Infra
-- Vercel for frontend
-- Serverless Postgres
-- Clerk for auth`,
+      content:
+        "# Tech Stack\n**Frontend:** Next.js, Tailwind, React Query\n**Backend:** Node.js / Express or Django\n**Database:** PostgreSQL\n**AI:** OpenAI GPT-4.1 + prompt engineering layer\n**Cloud:** AWS EC2 + RDS or Vercel\n**Integrations:** Razorpay/PayU, SMS gateway, CCTV vendor APIs",
       position: 0,
     },
     {
@@ -274,36 +140,18 @@ For the first 10 active teams:
       category: "engineering",
       name: "System Architecture",
       type: "text",
-      content: `# System Architecture
-
-- **App Layer**: Next.js app with app router
-- **API Layer**: tRPC routers (projects, narrative, board, sources, social)
-- **Data Layer**: Drizzle models for projects, narrative_sections, tasks, comments
-
-Key principles:
-- Keep narrative + tasks strongly linked
-- Prefer simple, explicit data models over premature microservices.`,
+      content:
+        "# System Architecture (High-Level)\n- Client initiates plan selection → backend fetches template\n- AI engine generates cost, timeline, materials\n- Backend stores lead + eligibility output\n- Monitoring dashboard retrieves mock milestone data from a simulation service\n- Financing engine runs rule-based scoring\n- Admin panel fetches leads and project metadata",
       position: 1,
     },
     {
       id: "e3",
       category: "engineering",
-      name: "Architecture Diagram",
-      type: "files",
-      content: "",
-      position: 2,
-    },
-    {
-      id: "e4",
-      category: "engineering",
-      name: "Testing & Quality",
+      name: "Testing Strategy",
       type: "text",
-      content: `# Testing & Quality
-
-- Unit tests for core hooks and components
-- Integration tests for key flows (create project → add narrative → add tasks)
-- Visual QA for board + timeline interactions`,
-      position: 3,
+      content:
+        "# Testing Strategy\n- **Unit Tests:** API endpoints, cost engine, eligibility logic\n- **Integration Tests:** AI planning workflow + DB\n- **UI Tests:** Landing page conversion flows\n- **Load Tests:** Estimator API and plan generator\n- **Security Tests:** Input validation, rate limiting",
+      position: 2,
     },
   ],
 
@@ -313,16 +161,8 @@ Key principles:
       category: "administrative",
       name: "Company Structure",
       type: "text",
-      content: `# Company Structure
-
-## Core Roles
-
-- Product & UX
-- Engineering
-- Growth / GTM
-- Ops & Finance
-
-The structure should stay **lean and flexible** for rapid iteration.`,
+      content:
+        "# Company Structure\n- **Founder & CEO:** Product, technology, operations\n- **Contract Architects (Future):** Template design and validation\n- **Project Ops (Future):** Vendor coordination, QC\n- **Finance Partner (External):** BNPL underwriting\nThis lean structure supports rapid MVP execution.",
       position: 0,
     },
     {
@@ -330,43 +170,29 @@ The structure should stay **lean and flexible** for rapid iteration.`,
       category: "administrative",
       name: "Operational Rituals",
       type: "text",
-      content: `# Operational Rituals
-
-- Weekly build review
-- Bi-weekly user feedback calls
-- Monthly product narrative review`,
+      content:
+        "# Operational Rituals\n- Weekly sprint planning\n- Sunday 1-hour strategy review\n- Vendor onboarding reviews\n- Monthly financial + performance audit",
       position: 1,
     },
   ],
 
   people_hr: [
     {
-      id: "h1",
+      id: "ph1",
       category: "people_hr",
       name: "Hiring Plan",
       type: "text",
-      content: `# Hiring Plan
-
-## Next 6–12 Months
-
-- Founding Engineer (Full-stack)
-- Product Designer
-- Growth Generalist
-
-Focus on **builders** who are comfortable with ambiguity and fast sprints.`,
+      content:
+        "# Hiring Plan (6–12 Months)\n**Phase 1:** (0–3 months)\n- Part-time architect/structural engineer\n\n**Phase 2:** (3–6 months)\n- Full-stack developer\n- Operations coordinator\n\n**Phase 3:** (6–12 months)\n- Vendor acquisition lead\n- Quality supervisor (onsite)",
       position: 0,
     },
     {
-      id: "h2",
+      id: "ph2",
       category: "people_hr",
       name: "Culture & Principles",
       type: "text",
-      content: `# Culture & Principles
-
-- Narrative before roadmap
-- Bias for shipping
-- Clear ownership
-- Honest retrospectives`,
+      content:
+        "# Culture & Principles\n- Build with trust and transparency\n- Prioritize safety and compliance\n- Move fast with clear execution plans\n- Be customer-obsessed\n- Document everything",
       position: 1,
     },
   ],
@@ -377,19 +203,8 @@ Focus on **builders** who are comfortable with ambiguity and fast sprints.`,
       category: "gtm",
       name: "Go-to-Market Strategy",
       type: "text",
-      content: `# Go-to-Market Strategy
-
-## Target Users
-
-- Solo founders
-- Tiny startup teams (2–10)
-- Indie hackers & studios
-
-## Channels
-
-- Product Hunt launch
-- Twitter / LinkedIn founder content
-- Partnerships with accelerators`,
+      content:
+        "# Go-to-Market Strategy\n- Launch landing page + LinkedIn ads for NCR\n- Partner with local architects & brokers\n- Offer free AI planning for early adopters\n- Case study from first 1–2 builds\n- NRI outreach via targeted social campaigns",
       position: 0,
     },
     {
@@ -397,14 +212,8 @@ Focus on **builders** who are comfortable with ambiguity and fast sprints.`,
       category: "gtm",
       name: "Positioning & Messaging",
       type: "text",
-      content: `# Positioning & Messaging
-
-> “SprintPlanner — Turn your ideas into executable 4-week ventures.”
-
-Messaging pillars:
-- Narrative-first
-- Execution-focused
-- Investor-ready`,
+      content:
+        "# Positioning & Messaging\n**Tagline:** Build Your Home. On Time, Every Time.\n\n**Messaging Pillars:**\n- Predictable timelines\n- Transparent pricing\n- Real-time visibility\n- Quality you can trust\n- Financing made simple",
       position: 1,
     },
   ],
@@ -413,25 +222,11 @@ Messaging pillars:
     {
       id: "f1",
       category: "funding",
-      name: "Financial Model (Spreadsheet)",
-      type: "files",
-      content: "",
-      position: 0,
-    },
-    {
-      id: "f2",
-      category: "funding",
       name: "Investment Narrative",
       type: "text",
-      content: `# Investment Narrative
-
-SprintPlanner sits at the intersection of:
-- Project management
-- Venture building
-- Founder tooling
-
-The wedge: **4-week narrative-driven execution**, expanding into a broader founder OS.`,
-      position: 1,
+      content:
+        "# Investment Narrative\nBrix sits at the intersection of prop-tech, fintech, and construction automation—an underserved $30B+ market in India. The platform standardizes construction workflows using AI and integrates financing to unlock latent demand. With every project, Brix captures high-margin service revenue and data flywheel advantages. Early capital accelerates vendor onboarding, tech automation, and regional scaling.",
+      position: 0,
     },
   ],
 
@@ -441,18 +236,8 @@ The wedge: **4-week narrative-driven execution**, expanding into a broader found
       category: "tools",
       name: "Tool Stack Overview",
       type: "text",
-      content: `# Tool Stack Overview
-
-## Dev & Ops
-- GitHub
-- Vercel
-- Neon / Postgres
-- Linear (for internal dogfooding or meta work)
-
-## Collaboration
-- Slack
-- Notion (for non-product docs)
-- Figma (for design)`,
+      content:
+        "# Tool Stack Overview\n- **Notion:** Documentation + roadmap\n- **Figma:** UI/UX design\n- **VSCode:** Development\n- **OpenAI API:** AI planning engine\n- **Whimsical/Figma:** Architecture diagrams\n- **AWS/Vercel:** Hosting + deployment",
       position: 0,
     },
     {
@@ -460,16 +245,8 @@ The wedge: **4-week narrative-driven execution**, expanding into a broader found
       category: "tools",
       name: "Build vs Buy Decisions",
       type: "text",
-      content: `# Build vs Buy Decisions
-
-We will **buy** where:
-- Commodity infra (auth, emails, hosting)
-- Not core to differentiation
-
-We will **build** where:
-- Narrative ↔ board experience
-- 4-week execution workflows
-- Investor/social narrative exports`,
+      content:
+        "# Build vs Buy Decisions\n- **Build:** AI planner, cost estimator, monitoring dashboard, admin panel\n- **Buy:** Payment gateway, SMS/Email, CCTV integrations, financing partners\nThis keeps engineering lean while maximizing value creation.",
       position: 1,
     },
   ],
