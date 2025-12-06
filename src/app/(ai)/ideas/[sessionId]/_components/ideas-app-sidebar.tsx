@@ -21,7 +21,6 @@ const IdeasAppSidebar = ({ children }: IdeasAppSidebarProps) => {
         <SidebarContent className="gap-0">
           <IdeaStepper activePhaseId={1} />
         </SidebarContent>
-        {/* <SidebarFooter /> */}
       </Sidebar>
       <SidebarInset className="bg-background">{children}</SidebarInset>
     </SidebarProvider>
