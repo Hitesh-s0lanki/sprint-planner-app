@@ -12,3 +12,9 @@ export async function getBoardMockData() {
     throw new Error("Failed to fetch board mock data");
   }
 }
+
+
+
+
+
+
