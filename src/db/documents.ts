@@ -12,9 +12,13 @@ import { projects } from "./projects";
 export const documents = pgTable("documents", {
   id: uuid("id").defaultRandom().primaryKey(),
 
-  projectId: uuid("project_id")
-    .notNull()
-    .references(() => projects.id, { onDelete: "cascade" }),
+  // OPTIONAL project reference
+  projectId: uuid("project_id").references(() => projects.id, {
+    onDelete: "cascade",
+  }),
+
+  // OPTIONAL session identifier (chat / agent session)
+  sessionId: varchar("session_id", { length: 128 }),
 
   // Title shown in sidebar + editor header
   title: varchar("title", { length: 255 }).notNull().default("Untitled"),
@@ -24,14 +28,17 @@ export const documents = pgTable("documents", {
 
   // BlockNote JSON document
   content: jsonb("content")
-    // .$type<BlockNoteContent>() // uncomment + replace when you have the type
     .notNull()
     .default(sql`'[]'::jsonb`),
+
+  // Who added the document: user or AI
+  addedBy: varchar("added_by", { length: 16 }).notNull().default("user"), // allowed values: 'user' | 'ai'
 
   // Timestamps
   createdAt: timestamp("created_at", { withTimezone: true })
     .notNull()
     .defaultNow(),
+
   updatedAt: timestamp("updated_at", { withTimezone: true })
     .notNull()
     .defaultNow(),
