@@ -16,7 +16,7 @@ export function IdeasSidebarHeader() {
         <SidebarMenuItem>
           <SidebarMenuButton
             size="lg"
-            className=" hover:bg-transparent"
+            className=" hover:bg-transparent gap-2"
             asChild
           >
             <Link href="/app">

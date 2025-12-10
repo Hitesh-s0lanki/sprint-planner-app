@@ -25,6 +25,7 @@ export interface ChatRequest {
   user_id?: string;
   messages: ChatMessage[];
   frontend_action?: FrontendAction;
+  idea_state_stage: number;
 }
 
 export interface ChatResponse {
@@ -75,12 +76,15 @@ export async function callStreamingEndpoint(
     // Handle non-200 responses
     if (!response.ok) {
       let errorMessage = `Server returned ${response.status}`;
-      
+
       try {
         const errorData: AIApiError = await response.json();
         if (typeof errorData.detail === "string") {
           errorMessage = errorData.detail;
-        } else if (Array.isArray(errorData.detail) && errorData.detail.length > 0) {
+        } else if (
+          Array.isArray(errorData.detail) &&
+          errorData.detail.length > 0
+        ) {
           errorMessage = errorData.detail[0].msg || errorMessage;
         }
       } catch {
@@ -92,7 +96,7 @@ export async function callStreamingEndpoint(
     }
 
     const data: ChatResponse = await response.json();
-    
+
     // Debug logging (remove in production if needed)
     if (process.env.NODE_ENV === "development") {
       console.log("AI API Response:", {
@@ -102,7 +106,7 @@ export async function callStreamingEndpoint(
         messages_count: data.messages?.length || 0,
       });
     }
-    
+
     return data;
   } catch (error) {
     // Handle network errors, timeouts, etc.
@@ -111,14 +115,16 @@ export async function callStreamingEndpoint(
         "Unable to connect to AI server. Please check if the server is running."
       );
     }
-    
+
     // Re-throw if it's already an Error with a message
     if (error instanceof Error) {
       throw error;
     }
-    
+
     // Fallback for unknown errors
-    throw new Error("An unexpected error occurred while connecting to the AI server.");
+    throw new Error(
+      "An unexpected error occurred while connecting to the AI server."
+    );
   }
 }
 
@@ -127,7 +133,8 @@ export async function callStreamingEndpoint(
  */
 export async function createSession(
   user_id?: string,
-  initialMessage?: string
+  initialMessage?: string,
+  stage: number = 1
 ): Promise<ChatResponse> {
   const messages: ChatMessage[] = initialMessage
     ? [
@@ -142,6 +149,7 @@ export async function createSession(
     request_type: "session_started",
     user_id,
     messages,
+    idea_state_stage: stage,
   });
 }
 
@@ -151,13 +159,14 @@ export async function createSession(
 export async function continueSession(
   sessionId: string,
   messages: ChatMessage[],
-  user_id?: string
+  user_id: string | undefined,
+  stage: number
 ): Promise<ChatResponse> {
   return callStreamingEndpoint({
     request_type: "session_ongoing",
     session_id: sessionId,
     user_id,
     messages,
+    idea_state_stage: stage,
   });
 }
-
