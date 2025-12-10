@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import { Send, Lightbulb, MessageCircle, Target } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface IdeasChatInputProps {
   onSend: (text: string) => void;
@@ -153,9 +154,13 @@ const suggestions = [
 ];
 
 function QuickActionSuggestions({ onAction }: QuickActionSuggestionsProps) {
+  const isMobile = useIsMobile();
+  // Show only 2 suggestions on mobile, all 3 on desktop
+  const displayedSuggestions = isMobile ? suggestions.slice(0, 1) : suggestions;
+
   return (
     <div className="flex flex-wrap gap-2">
-      {suggestions.map((item) => (
+      {displayedSuggestions.map((item) => (
         <Button
           key={item.label}
           variant="outline"

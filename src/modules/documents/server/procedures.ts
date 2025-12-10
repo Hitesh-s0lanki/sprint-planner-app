@@ -93,6 +93,14 @@ export const documentsRouter = createTRPCRouter({
           });
         }
 
+        // Check if document has a project ID
+        if (!document.projectId) {
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: "Document is not associated with a project",
+          });
+        }
+
         // Verify user has access to the project
         const project = await getProjectById(document.projectId);
 
@@ -202,6 +210,14 @@ export const documentsRouter = createTRPCRouter({
           });
         }
 
+        // Check if document has a project ID
+        if (!existingDocument.projectId) {
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: "Document is not associated with a project",
+          });
+        }
+
         // Verify user has access to the project
         const project = await getProjectById(existingDocument.projectId);
 
@@ -264,6 +280,14 @@ export const documentsRouter = createTRPCRouter({
           throw new TRPCError({
             code: "NOT_FOUND",
             message: "Document not found",
+          });
+        }
+
+        // Check if document has a project ID
+        if (!existingDocument.projectId) {
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: "Document is not associated with a project",
           });
         }
 
