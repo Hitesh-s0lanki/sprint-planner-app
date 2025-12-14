@@ -41,7 +41,9 @@ export function InvestorThreadList({
     onFilterChange?.(value);
   };
 
-  const handleSortChange = (value: "recent" | "highest_interest" | "oldest") => {
+  const handleSortChange = (
+    value: "recent" | "highest_interest" | "oldest"
+  ) => {
     setSort(value);
     onSortChange?.(value);
   };
@@ -49,9 +51,9 @@ export function InvestorThreadList({
   if (isLoading) {
     return (
       <div className="flex flex-col h-full border-r bg-background">
-        <div className="p-4 border-b space-y-2">
-          <Skeleton className="h-9 w-full" />
-          <Skeleton className="h-9 w-full" />
+        <div className="p-3 sm:p-4 border-b space-y-2 shrink-0">
+          <Skeleton className="h-8 sm:h-9 w-full" />
+          <Skeleton className="h-8 sm:h-9 w-full" />
         </div>
         <div className="flex-1 overflow-y-auto p-2 space-y-2">
           {[1, 2, 3, 4, 5].map((i) => (
@@ -65,10 +67,10 @@ export function InvestorThreadList({
   if (conversations.length === 0) {
     return (
       <div className="flex flex-col h-full border-r bg-background">
-        <div className="p-4 border-b">
+        <div className="p-3 sm:p-4 border-b shrink-0">
           <div className="flex items-center gap-2 mb-3">
             <Select value={filter} onValueChange={handleFilterChange}>
-              <SelectTrigger className="h-8 text-xs">
+              <SelectTrigger className="h-8 sm:h-9 text-xs flex-1">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -79,26 +81,29 @@ export function InvestorThreadList({
               </SelectContent>
             </Select>
             <Select value={sort} onValueChange={handleSortChange}>
-              <SelectTrigger className="h-8 text-xs">
+              <SelectTrigger className="h-8 sm:h-9 text-xs flex-1">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="recent">Recent</SelectItem>
-                <SelectItem value="highest_interest">Highest Interest</SelectItem>
+                <SelectItem value="highest_interest">
+                  Highest Interest
+                </SelectItem>
                 <SelectItem value="oldest">Oldest</SelectItem>
               </SelectContent>
             </Select>
           </div>
         </div>
-        <div className="flex-1 flex items-center justify-center p-8">
-          <div className="text-center space-y-4 max-w-sm">
-            <MessageSquarePlus className="h-12 w-12 mx-auto text-muted-foreground/40" />
+        <div className="flex-1 flex items-center justify-center p-4 sm:p-8">
+          <div className="text-center space-y-3 sm:space-y-4 max-w-sm">
+            <MessageSquarePlus className="h-10 w-10 sm:h-12 sm:w-12 mx-auto text-muted-foreground/40" />
             <div>
-              <h3 className="font-semibold text-lg mb-2">
+              <h3 className="font-semibold text-base sm:text-lg mb-2">
                 No investor conversations yet
               </h3>
-              <p className="text-sm text-muted-foreground">
-                Investors will appear here once they send you a message. Share your investor link to get started.
+              <p className="text-xs sm:text-sm text-muted-foreground px-2">
+                Investors will appear here once they send you a message. Share
+                your investor link to get started.
               </p>
             </div>
           </div>
@@ -108,12 +113,12 @@ export function InvestorThreadList({
   }
 
   return (
-    <div className="flex flex-col h-full border-r bg-background w-full md:w-[35%]">
+    <div className="flex flex-col h-full border-r bg-background w-full md:w-[35%] lg:w-[320px] shrink-0">
       {/* Filters */}
-      <div className="p-4 border-b space-y-2">
+      <div className="p-3 sm:p-4 border-b space-y-2 shrink-0">
         <div className="flex items-center gap-2">
           <Select value={filter} onValueChange={handleFilterChange}>
-            <SelectTrigger className="h-8 text-xs flex-1">
+            <SelectTrigger className="h-8 sm:h-9 text-xs flex-1">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -124,7 +129,7 @@ export function InvestorThreadList({
             </SelectContent>
           </Select>
           <Select value={sort} onValueChange={handleSortChange}>
-            <SelectTrigger className="h-8 text-xs flex-1">
+            <SelectTrigger className="h-8 sm:h-9 text-xs flex-1">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -150,4 +155,3 @@ export function InvestorThreadList({
     </div>
   );
 }
-

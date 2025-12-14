@@ -17,7 +17,7 @@ const Onboarding = () => {
     trpc.clerkAuth.createUser.mutationOptions({
       onSuccess: (res) => {
         toast.success(res.message);
-        router.push(`/`);
+        router.push(`/ideas`);
       },
       onError: (err) => {
         toast.error(err.message || "Failed to create user");

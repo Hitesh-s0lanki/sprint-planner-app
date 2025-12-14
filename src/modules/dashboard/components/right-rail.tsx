@@ -3,18 +3,18 @@ import { QuickActionsCard } from "./quick-actions-card";
 // import { FocusModeCard } from "./focus-mode-card";
 import { ProjectMetaCard } from "./project-meta-card";
 import { RecentActivityCard } from "./recent-activity-card";
-import { dashboardMock } from "../dashboard-mock";
+import type { DashboardLists } from "../server/actions";
 
 interface Props {
   project: {
     id: string;
     key: string;
     name: string;
-    description: string;
+    description: string | null;
     status: string;
     createdAt: string;
   };
-  lists: (typeof dashboardMock)["lists"];
+  lists: DashboardLists;
 }
 
 export function RightRail({ project, lists }: Props) {

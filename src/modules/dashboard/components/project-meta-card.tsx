@@ -7,7 +7,7 @@ interface Props {
     id: string;
     key: string;
     name: string;
-    description: string;
+    description: string | null;
     status: string;
     createdAt: string;
   };
@@ -34,7 +34,9 @@ export function ProjectMetaCard({ project }: Props) {
         </div>
         <div>
           <p className="text-xs text-muted-foreground">Description</p>
-          <p className="text-sm text-muted-foreground">{project.description}</p>
+          <p className="text-sm text-muted-foreground">
+            {project.description || "No description"}
+          </p>
         </div>
         <div>
           <p className="text-xs text-muted-foreground">Created</p>
@@ -44,4 +46,3 @@ export function ProjectMetaCard({ project }: Props) {
     </Card>
   );
 }
-

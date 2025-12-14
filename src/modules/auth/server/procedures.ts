@@ -1,7 +1,7 @@
 import { users } from "@/db/users";
 import { db } from "@/lib/db";
 import { createTRPCRouter, protectedProcedure } from "@/trpc/init";
-import { eq } from "drizzle-orm";
+import { eq, or } from "drizzle-orm";
 import { TRPCError } from "@trpc/server";
 import { currentUser } from "@clerk/nextjs/server";
 import { apiResponse } from "@/lib/handler";
@@ -13,16 +13,26 @@ export const authRouter = createTRPCRouter({
     try {
       const clerkUser = await currentUser();
 
+      const email = clerkUser?.emailAddresses?.[0]?.emailAddress ?? null;
+
       const [existing] = await db
         .select()
         .from(users)
-        .where(eq(users.clerkId, ctx.auth.userId));
+        .where(
+          or(
+            eq(users.clerkId, ctx.auth.userId),
+            email ? eq(users.email, email) : undefined
+          )
+        )
+        .limit(1);
 
       if (existing) {
-        throw new TRPCError({
-          code: "BAD_REQUEST",
-          message: "User already exists",
+        updateUserProfile(ctx.auth.userId, {
+          name: clerkUser?.firstName + " " + clerkUser?.lastName,
+          clerkId: ctx.auth.userId,
+          email: email ?? undefined,
         });
+        return apiResponse("User updated", 200);
       }
 
       await db.insert(users).values({
@@ -64,6 +74,17 @@ export const authRouter = createTRPCRouter({
         code: "INTERNAL_SERVER_ERROR",
         message: "Failed to fetch profile",
       });
+    }
+  }),
+
+  checkUserExists: protectedProcedure.query(async ({ ctx }) => {
+    try {
+      const user = await getUserByClerkId(ctx.auth.userId);
+      return apiResponse("User check completed", 200, { exists: !!user });
+    } catch (error) {
+      console.error("Error in checkUserExists procedure:", error);
+      // Return false if there's an error checking
+      return apiResponse("User check completed", 200, { exists: false });
     }
   }),
 

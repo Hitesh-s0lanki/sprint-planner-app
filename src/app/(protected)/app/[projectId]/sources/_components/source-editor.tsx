@@ -160,18 +160,18 @@ export function SourceEditor({
                   size="sm"
                   onClick={cancelEdit}
                   disabled={isSaving}
-                  className="h-8"
+                  className="h-6 text-xs rounded-full"
                 >
-                  <X className="h-4 w-4" />
+                  <X className="size-3" />
                   Cancel
                 </Button>
                 <Button
                   size="sm"
                   onClick={handleSave}
                   disabled={isSaving}
-                  className="h-8 bg-[#1d1c24] text-white hover:bg-[#2a2830]"
+                  className="h-6 text-xs bg-[#1d1c24] text-white hover:bg-[#2a2830] rounded-full"
                 >
-                  <Save className="h-4 w-4" />
+                  <Save className=" size-3" />
                   {isSaving ? "Saving..." : "Save"}
                 </Button>
               </div>

@@ -28,6 +28,40 @@ export default function SocialPage() {
   const [sort, setSort] = useState<"recent" | "highest_interest" | "oldest">(
     "recent"
   );
+  const [showThreadList, setShowThreadList] = useState(true);
+  const [isMobile, setIsMobile] = useState(false);
+  const [userToggledThreadList, setUserToggledThreadList] = useState(false);
+
+  // Detect mobile on mount and window resize
+  useEffect(() => {
+    const checkMobile = () => {
+      if (typeof window !== "undefined") {
+        setIsMobile(window.innerWidth < 768);
+      }
+    };
+
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  // Derive showThreadList from activeConversationId and isMobile
+  // Only override with state if user explicitly toggled it
+  const shouldShowThreadList = useMemo(() => {
+    if (userToggledThreadList) {
+      return showThreadList;
+    }
+    // On mobile, show thread list when no conversation is selected
+    if (isMobile && !activeConversationId) {
+      return true;
+    }
+    // On desktop, always show thread list
+    if (!isMobile) {
+      return true;
+    }
+    // On mobile with conversation, hide thread list
+    return false;
+  }, [isMobile, activeConversationId, showThreadList, userToggledThreadList]);
 
   // Fetch summary
   const summaryQueryOptions = trpc.investors.getSummary.queryOptions({
@@ -112,8 +146,13 @@ export default function SocialPage() {
       setActiveConversationId(id);
       // Mark as read when selected
       markReadMutation.mutate({ conversationId: id });
+      // Mark that user interacted, so we respect their choice
+      if (isMobile) {
+        setUserToggledThreadList(true);
+        setShowThreadList(false);
+      }
     },
-    [markReadMutation]
+    [markReadMutation, isMobile]
   );
 
   // Handle sending message
@@ -137,13 +176,14 @@ export default function SocialPage() {
     [conversations]
   );
 
-  // Auto-select first conversation if none selected
+  // Auto-select first conversation if none selected (only on desktop)
   useEffect(() => {
     if (
       !activeConversationId &&
       firstConversationId &&
       !isLoadingConversations &&
-      !hasAutoSelectedRef.current
+      !hasAutoSelectedRef.current &&
+      !isMobile
     ) {
       hasAutoSelectedRef.current = true;
       // Use requestAnimationFrame to defer state update
@@ -163,33 +203,72 @@ export default function SocialPage() {
     isLoadingConversations,
     markReadMutation,
     conversations.length,
+    isMobile,
   ]);
 
   return (
-    <div className="flex flex-col h-[calc(100vh-3.5rem)] w-full">
+    <div className="flex flex-col h-[calc(100vh-3.5rem)] w-full overflow-hidden">
       {/* Sentiment Strip */}
-      <InvestorSentimentStrip summary={summary} isLoading={isLoadingSummary} />
-
-      {/* Main Content - Two Column Layout */}
-      <div className="flex flex-1 overflow-hidden">
-        {/* Left Column - Thread List */}
-        <InvestorThreadList
-          conversations={conversations}
-          activeConversationId={activeConversationId}
-          onSelectConversation={handleSelectConversation}
-          isLoading={isLoadingConversations}
-          onFilterChange={setFilter}
-          onSortChange={setSort}
+      <div className="relative shrink-0">
+        <InvestorSentimentStrip
+          summary={summary}
+          isLoading={isLoadingSummary}
         />
+      </div>
+
+      {/* Main Content - Responsive Layout */}
+      <div className="flex flex-1 overflow-hidden relative">
+        {/* Left Column - Thread List */}
+        <div
+          className={`
+            ${shouldShowThreadList ? "flex" : "hidden"}
+            md:flex
+            flex-col
+            h-full
+            border-r
+            bg-background
+            w-full
+            md:w-[35%]
+            lg:w-[320px]
+            shrink-0
+          `}
+        >
+          <InvestorThreadList
+            conversations={conversations}
+            activeConversationId={activeConversationId}
+            onSelectConversation={handleSelectConversation}
+            isLoading={isLoadingConversations}
+            onFilterChange={setFilter}
+            onSortChange={setSort}
+          />
+        </div>
 
         {/* Right Column - Conversation View */}
-        <InvestorConversationView
-          conversation={activeConversation}
-          messages={messages}
-          isLoading={isLoadingConversations}
-          isLoadingMessages={isLoadingMessages}
-          onSendMessage={handleSendMessage}
-        />
+        <div
+          className={`
+            ${shouldShowThreadList ? "hidden md:flex" : "flex"}
+            flex-col
+            h-full
+            bg-background
+            flex-1
+            min-w-0
+          `}
+        >
+          <InvestorConversationView
+            conversation={activeConversation}
+            messages={messages}
+            isLoading={isLoadingConversations}
+            isLoadingMessages={isLoadingMessages}
+            onSendMessage={handleSendMessage}
+            onBack={() => {
+              setUserToggledThreadList(true);
+              setShowThreadList(true);
+            }}
+            showBackButton={
+              !shouldShowThreadList && activeConversationId !== null
+            }
+          />
+        </div>
       </div>
     </div>
   );

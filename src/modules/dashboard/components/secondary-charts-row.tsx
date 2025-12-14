@@ -3,10 +3,10 @@ import { PriorityBarChart } from "./charts/priority-bar-chart";
 import { ExecutionHeatmapChart } from "./charts/execution-heatmap-chart";
 import { GoalVsActualChart } from "./charts/goal-vs-actual-chart";
 import { RiskBubbleChart } from "./charts/risk-bubble-chart";
-import { dashboardMock } from "../dashboard-mock";
+import type { DashboardCharts } from "../server/actions";
 
 export interface SecondaryChartsRowProps {
-  charts: (typeof dashboardMock)["charts"];
+  charts: DashboardCharts;
 }
 
 export function SecondaryChartsRow({ charts }: SecondaryChartsRowProps) {

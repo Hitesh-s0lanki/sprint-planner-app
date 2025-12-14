@@ -1,71 +1,90 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import { CheckCircle2, Loader2, Circle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { IdeasChatHeader } from "./ideas-chat-header";
+import type { EventType } from "@/modules/chat/types";
 
 interface LoadingStep {
-  id: string;
+  id: EventType | "redirecting";
   label: string;
   status: "pending" | "loading" | "completed";
 }
 
-const STEPS: LoadingStep[] = [
-  { id: "project", label: "Project Creation", status: "pending" },
-  { id: "tasking", label: "Sprint Generation", status: "pending" },
-  { id: "source", label: "Sources Generation", status: "pending" },
-  { id: "narrative", label: "Narrative Drafting", status: "pending" },
-  { id: "invitation", label: "Inviting Team", status: "pending" },
-  { id: "redirecting", label: "Heading to Project", status: "pending" },
-];
+const STEP_LABELS: Record<EventType | "redirecting", string> = {
+  team_members_synced: "Syncing Team Members",
+  project_created: "Creating Project",
+  sources_updated: "Updating Documents",
+  sprint_plan_generated: "Generating Sprint Plan",
+  narrative_sections_started: "Starting Narrative Generation",
+  completed: "Finalizing",
+  redirecting: "Heading to Project",
+};
 
-// Initialize with first step as loading
-const INITIAL_STEPS: LoadingStep[] = STEPS.map((step, idx) =>
-  idx === 0 ? { ...step, status: "loading" as const } : step
-);
+interface IdeasLoadingStepsProps {
+  eventProgress?: Partial<Record<EventType, "idle" | "started" | "completed">>;
+  isCompleted?: boolean;
+  isRedirecting?: boolean;
+}
 
-export function IdeasLoadingSteps() {
-  const [steps, setSteps] = useState<LoadingStep[]>(INITIAL_STEPS);
-  const [currentStepIndex, setCurrentStepIndex] = useState(0);
+export function IdeasLoadingSteps({
+  eventProgress = {},
+  isCompleted = false,
+  isRedirecting = false,
+}: IdeasLoadingStepsProps) {
+  // Build steps based on event progress
+  const eventOrder: (EventType | "redirecting")[] = [
+    "team_members_synced",
+    "project_created",
+    "sources_updated",
+    "sprint_plan_generated",
+    "narrative_sections_started",
+    "completed",
+    "redirecting",
+  ];
 
-  useEffect(() => {
-    // Process current step
-    if (currentStepIndex < STEPS.length) {
-      // After 2 seconds, mark as completed and move to next
-      const timeout = setTimeout(() => {
-        setSteps((prevSteps) =>
-          prevSteps.map((step, idx) =>
-            idx === currentStepIndex
-              ? { ...step, status: "completed" as const }
-              : step
-          )
-        );
-
-        // Move to next step if not at the end
-        if (currentStepIndex < STEPS.length - 1) {
-          const nextIndex = currentStepIndex + 1;
-          setCurrentStepIndex(nextIndex);
-          // Mark next step as loading
-          setSteps((prevSteps) =>
-            prevSteps.map((step, idx) =>
-              idx === nextIndex ? { ...step, status: "loading" as const } : step
-            )
-          );
-        } else {
-          // All steps completed
-          setCurrentStepIndex(STEPS.length);
-        }
-      }, 2000);
-
-      return () => clearTimeout(timeout);
+  const steps: LoadingStep[] = eventOrder.map((eventId) => {
+    if (eventId === "redirecting") {
+      return {
+        id: "redirecting",
+        label: STEP_LABELS.redirecting,
+        status: isRedirecting
+          ? "loading"
+          : isCompleted
+          ? "completed"
+          : "pending",
+      };
     }
-  }, [currentStepIndex]);
+
+    const progress = eventProgress[eventId];
+    let status: "pending" | "loading" | "completed" = "pending";
+
+    if (progress === "started") {
+      status = "loading";
+    } else if (progress === "completed") {
+      status = "completed";
+    } else if (eventId === "completed" && isCompleted) {
+      status = "completed";
+    }
+
+    return {
+      id: eventId,
+      label: STEP_LABELS[eventId],
+      status,
+    };
+  });
+
+  // Calculate current step index (first non-completed step)
+  const currentStepIndex = steps.findIndex(
+    (step) => step.status !== "completed"
+  );
+  const activeStepIndex =
+    currentStepIndex === -1 ? steps.length : currentStepIndex;
 
   return (
     <div className="relative flex flex-col flex-1 h-full overflow-hidden">
       <IdeasChatHeader
-        activeStep={currentStepIndex}
+        activeStep={activeStepIndex}
         stepName="Planning Your Sprints"
         onOpenSteps={() => {}}
       />
@@ -119,11 +138,11 @@ export function IdeasLoadingSteps() {
           </div>
 
           {/* Progress Indicator */}
-          <div className="pt-4md:px-10 px-4 lg:px-16">
+          <div className="pt-4 md:px-10 px-4 lg:px-16">
             <div className="flex items-center justify-center text-xs text-slate-500 mb-2">
               <span>
-                Step {Math.min(currentStepIndex + 1, STEPS.length)} of{" "}
-                {STEPS.length}
+                Step {Math.min(activeStepIndex + 1, steps.length)} of{" "}
+                {steps.length}
               </span>
             </div>
           </div>

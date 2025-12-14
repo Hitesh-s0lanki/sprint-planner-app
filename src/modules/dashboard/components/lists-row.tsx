@@ -1,10 +1,10 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { UpcomingDeadlinesCard } from "./upcoming-deadlines-card";
 import { MyTasksCard } from "./my-tasks-card";
-import { dashboardMock } from "../dashboard-mock";
+import type { DashboardLists } from "../server/actions";
 
 export interface ListsRowProps {
-  lists: (typeof dashboardMock)["lists"];
+  lists: DashboardLists;
 }
 
 export function ListsRow({ lists }: ListsRowProps) {

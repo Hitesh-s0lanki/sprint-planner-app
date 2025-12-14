@@ -1,17 +1,24 @@
-// app/app/[projectId]/board/page.tsx
-
-import { BoardPage } from "@/features/board/board-page";
-import { boardMock } from "@/features/board/board-mock";
+import { BoardPage } from "./_components/board-page";
+import { createTRPCCaller } from "@/trpc/server";
 
 interface PageProps {
-  params: { projectId: string };
+  params: Promise<{ projectId: string }>;
 }
 
-export default function ProjectBoardPage({
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  params: _params,
-}: PageProps) {
-  // later: _params.projectId -> fetch real data
-  return <BoardPage data={boardMock} />;
-}
+export default async function ProjectBoardPage({ params }: PageProps) {
+  const { projectId } = await params;
+  const caller = await createTRPCCaller();
+  const response = await caller.tasks.getByProjectId({
+    projectId,
+  });
 
+  if (!response?.data?.board) {
+    return (
+      <div className="flex h-full items-center justify-center">
+        <p className="text-sm text-muted-foreground">Failed to load tasks</p>
+      </div>
+    );
+  }
+
+  return <BoardPage data={response.data.board} />;
+}

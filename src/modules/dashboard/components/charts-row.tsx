@@ -1,10 +1,10 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { SprintVelocityRadarChart } from "./charts/sprint-velocity-radar-chart";
 import { StatusDistributionDonutChart } from "./charts/status-distribution-donut";
-import { dashboardMock } from "../dashboard-mock";
+import type { DashboardCharts } from "../server/actions";
 
 export interface ChartsRowProps {
-  charts: (typeof dashboardMock)["charts"];
+  charts: DashboardCharts;
 }
 
 export function ChartsRow({ charts }: ChartsRowProps) {

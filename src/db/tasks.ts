@@ -6,7 +6,9 @@ import {
   uuid,
   primaryKey,
   pgEnum,
+  integer,
   foreignKey,
+  real,
 } from "drizzle-orm/pg-core";
 import { projects } from "./projects";
 import { users } from "./users";
@@ -19,6 +21,8 @@ export const taskStatus = pgEnum("task_status", [
   "cancelled",
 ]);
 
+export const taskGeneratedBy = pgEnum("task_generated_by", ["user", "ai"]);
+
 export const tasks = pgTable("tasks", {
   id: uuid("id").defaultRandom().primaryKey(),
 
@@ -28,7 +32,15 @@ export const tasks = pgTable("tasks", {
 
   key: varchar("key", { length: 50 }).notNull().unique(), // e.g., "SP-12"
   title: varchar("title", { length: 256 }).notNull(),
+
+  sprint_week: integer("sprint_week").default(0),
+
+  tags: text("tags").array().notNull().default([]), // e.g., ["feature", "critical", "urgent"]
+
   description: text("description"),
+  ai_description: text("ai_description"),
+
+  generated_by: taskGeneratedBy("task_generated_by").notNull().default("user"),
 
   status: taskStatus("task_status").notNull().default("backlog"),
   priority: varchar("priority", { length: 50 }).notNull().default("Medium"),
@@ -39,7 +51,9 @@ export const tasks = pgTable("tasks", {
 
   // ⭐ Parent task (nullable) - self-reference
   parentTaskId: uuid("parent_task_id"), // NULL allowed
+  timeline_days: real("timeline_days"), // can be 2.5
 
+  startDate: timestamp("start_date"),
   dueDate: timestamp("due_date"),
 
   createdAt: timestamp("created_at").defaultNow().notNull(),
