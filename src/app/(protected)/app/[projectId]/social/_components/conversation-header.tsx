@@ -20,17 +20,20 @@ const interestConfig: Record<
   high: {
     emoji: "🔥",
     label: "High",
-    className: "border-orange-200 bg-orange-50 text-orange-700 dark:border-orange-900 dark:bg-orange-950 dark:text-orange-300",
+    className:
+      "border-orange-200 bg-orange-50 text-orange-700 dark:border-orange-900 dark:bg-orange-950 dark:text-orange-300",
   },
   warm: {
     emoji: "🙂",
     label: "Warm",
-    className: "border-blue-200 bg-blue-50 text-blue-700 dark:border-blue-900 dark:bg-blue-950 dark:text-blue-300",
+    className:
+      "border-blue-200 bg-blue-50 text-blue-700 dark:border-blue-900 dark:bg-blue-950 dark:text-blue-300",
   },
   exploring: {
     emoji: "🤔",
     label: "Exploring",
-    className: "border-gray-200 bg-gray-50 text-gray-700 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-300",
+    className:
+      "border-gray-200 bg-gray-50 text-gray-700 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-300",
   },
 };
 
@@ -49,31 +52,31 @@ export function ConversationHeader({
     : null;
 
   return (
-    <div className="p-4 border-b bg-muted/30 space-y-3">
+    <div className="p-3 sm:p-4 border-b bg-muted/30 space-y-2 sm:space-y-3 shrink-0">
       <div className="flex items-center justify-between">
-        <h2 className="font-semibold text-lg">
+        <h2 className="font-semibold text-base sm:text-lg">
           Investor #{conversation.investorNumber}
         </h2>
       </div>
 
-      <div className="flex items-center gap-3 flex-wrap">
+      <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
         <Badge
           variant="outline"
-          className={`rounded-lg px-2.5 py-1 text-xs ${interest.className}`}
+          className={`rounded-lg px-2 sm:px-2.5 py-0.5 sm:py-1 text-xs shrink-0 ${interest.className}`}
         >
           {interest.emoji} {interest.label}
         </Badge>
         <Badge
           variant="outline"
-          className="rounded-lg px-2.5 py-1 text-xs border-border/60 bg-background"
+          className="rounded-lg px-2 sm:px-2.5 py-0.5 sm:py-1 text-xs border-border/60 bg-background shrink-0"
         >
           {rankLabels[conversation.rank] || "Other"}
         </Badge>
-        <span className="text-xs text-muted-foreground">
+        <span className="text-xs text-muted-foreground shrink-0">
           Started {startedTime}
         </span>
         {lastActiveTime && (
-          <span className="text-xs text-muted-foreground">
+          <span className="text-xs text-muted-foreground shrink-0 hidden sm:inline">
             Last active {lastActiveTime}
           </span>
         )}
@@ -81,4 +84,3 @@ export function ConversationHeader({
     </div>
   );
 }
-

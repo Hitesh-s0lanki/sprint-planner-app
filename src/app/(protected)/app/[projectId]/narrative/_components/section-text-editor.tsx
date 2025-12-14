@@ -47,7 +47,7 @@ export function SectionTextEditor({
   };
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-3 sm:gap-4">
       {/* Edit/Preview Tabs */}
       <Tabs
         value={activeTab}
@@ -106,7 +106,7 @@ export function SectionTextEditor({
               )}
               placeholder="Start writing your narrative in Markdown..."
             />
-            <div className="absolute bottom-4 right-4 flex items-center gap-4">
+            <div className="absolute bottom-3 sm:bottom-4 right-3 sm:right-4 flex items-center gap-2 sm:gap-4">
               <p className="text-xs text-muted-foreground">
                 {wordCount.words} {wordCount.words === 1 ? "word" : "words"}
               </p>

@@ -16,14 +16,14 @@ export function MessageBubble({ message }: MessageBubbleProps) {
   return (
     <div
       className={cn(
-        "flex gap-3",
+        "flex gap-2 sm:gap-3",
         isFounder ? "flex-row-reverse" : "flex-row"
       )}
     >
       {/* Avatar placeholder */}
       <div
         className={cn(
-          "h-10 w-10 rounded-full shrink-0 flex items-center justify-center text-sm font-semibold",
+          "h-8 w-8 sm:h-10 sm:w-10 rounded-full shrink-0 flex items-center justify-center text-xs sm:text-sm font-semibold",
           isFounder
             ? "bg-primary text-primary-foreground"
             : "bg-muted text-muted-foreground"
@@ -35,11 +35,11 @@ export function MessageBubble({ message }: MessageBubbleProps) {
       {/* Message content */}
       <div
         className={cn(
-          "flex flex-col gap-1 max-w-[70%]",
+          "flex flex-col gap-1 max-w-[75%] sm:max-w-[70%] min-w-0",
           isFounder ? "items-end" : "items-start"
         )}
       >
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5 sm:gap-2">
           <span className="text-xs text-muted-foreground">
             {isFounder ? "You" : "Investor"}
           </span>
@@ -48,24 +48,24 @@ export function MessageBubble({ message }: MessageBubbleProps) {
 
         <div
           className={cn(
-            "rounded-2xl px-4 py-2.5 shadow-sm",
+            "rounded-xl sm:rounded-2xl px-3 sm:px-4 py-2 sm:py-2.5 shadow-sm",
             isFounder
               ? "bg-primary text-primary-foreground"
               : "bg-muted text-foreground border border-border/50"
           )}
         >
-          <p className="text-sm whitespace-pre-wrap break-words">
+          <p className="text-xs sm:text-sm whitespace-pre-wrap break-words">
             {message.body}
           </p>
 
           {message.tags && (
-            <div className="mt-2 flex flex-wrap gap-1">
+            <div className="mt-1.5 sm:mt-2 flex flex-wrap gap-1">
               {message.tags.split(",").map((tag, index) => (
                 <Badge
                   key={index}
                   variant="outline"
                   className={cn(
-                    "text-xs rounded-md px-2 py-0.5",
+                    "text-xs rounded-md px-1.5 sm:px-2 py-0.5 shrink-0",
                     isFounder
                       ? "bg-primary-foreground/20 text-primary-foreground border-primary-foreground/30"
                       : "bg-background/50"
@@ -81,4 +81,3 @@ export function MessageBubble({ message }: MessageBubbleProps) {
     </div>
   );
 }
-

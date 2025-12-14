@@ -2,8 +2,7 @@
 
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useTRPC } from "@/trpc/client";
-import { DashboardPage } from "@/features/dashboard/dashboard-page";
-import { dashboardMock } from "@/features/dashboard/dashboard-mock";
+import { DashboardPage } from "@/modules/dashboard/dashboard-page";
 
 interface DashboardViewProps {
   projectId: string;
@@ -12,41 +11,18 @@ interface DashboardViewProps {
 export function DashboardView({ projectId }: DashboardViewProps) {
   const trpc = useTRPC();
 
-  // Fetch project data using suspense query
+  // Fetch dashboard data using suspense query
   const { data } = useSuspenseQuery(
-    trpc.projects.getById.queryOptions({ projectId })
+    trpc.dashboard.getByProjectId.queryOptions({ projectId })
   );
 
-  if (!data?.data?.item) {
-    // Fallback to mock data if project not found
-    return <DashboardPage data={dashboardMock} />;
+  if (!data?.data?.dashboard) {
+    return (
+      <div className="flex h-full items-center justify-center">
+        <p className="text-muted-foreground">Failed to load dashboard data</p>
+      </div>
+    );
   }
 
-  // Transform the project data to match the dashboard mock structure
-  const projectInfo = data.data.item;
-
-  // Handle createdAt - it might be a Date object or a string after serialization
-  const createdAtValue = projectInfo.createdAt as Date | string;
-  const createdAtISO =
-    createdAtValue instanceof Date
-      ? createdAtValue.toISOString()
-      : typeof createdAtValue === "string"
-        ? createdAtValue
-        : new Date(createdAtValue).toISOString();
-
-  // Use mock data but replace the project info with real data
-  const dashboardData = {
-    ...dashboardMock,
-    project: {
-      id: projectInfo.id,
-      key: projectInfo.key,
-      name: projectInfo.name,
-      description: projectInfo.description || "",
-      status: projectInfo.status,
-      createdAt: createdAtISO,
-    },
-  };
-
-  return <DashboardPage data={dashboardData} />;
+  return <DashboardPage data={data.data.dashboard} />;
 }
-

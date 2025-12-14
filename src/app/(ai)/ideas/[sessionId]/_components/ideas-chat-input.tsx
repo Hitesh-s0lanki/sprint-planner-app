@@ -54,6 +54,10 @@ export function IdeasChatInput({
 
       if (textareaRef.current) {
         textareaRef.current.style.height = "auto";
+        // Refocus after sending
+        setTimeout(() => {
+          textareaRef.current?.focus();
+        }, 0);
       }
     }
   };
@@ -63,6 +67,31 @@ export function IdeasChatInput({
       textareaRef.current.style.height = "auto";
     }
   }, [value]);
+
+  // Auto-focus textarea on mount
+  useEffect(() => {
+    const textarea = textareaRef.current;
+    if (textarea) {
+      // Small delay to ensure the component is fully rendered
+      const timeoutId = setTimeout(() => {
+        textarea.focus();
+      }, 100);
+      return () => clearTimeout(timeoutId);
+    }
+  }, []);
+
+  // Refocus when loading completes
+  useEffect(() => {
+    if (!isLoading) {
+      const textarea = textareaRef.current;
+      if (textarea) {
+        const timeoutId = setTimeout(() => {
+          textarea.focus();
+        }, 0);
+        return () => clearTimeout(timeoutId);
+      }
+    }
+  }, [isLoading]);
 
   const disabled = !value.trim() || isLoading;
 
@@ -97,6 +126,7 @@ export function IdeasChatInput({
           placeholder={placeholder}
           disabled={isLoading}
           rows={1}
+          autoFocus
           className="
             w-full resize-none bg-white/90 backdrop-blur-sm
             border border-slate-300/60

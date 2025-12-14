@@ -3,9 +3,10 @@ import { SummaryRow } from "./components/summary-row";
 import { ChartsRow } from "./components/charts-row";
 import { ListsRow } from "./components/lists-row";
 import { RightRail } from "./components/right-rail";
+import type { DashboardData } from "./server/actions";
 
 interface DashboardPageProps {
-  data: typeof import("./dashboard-mock").dashboardMock;
+  data: DashboardData;
 }
 
 export function DashboardPage({ data }: DashboardPageProps) {

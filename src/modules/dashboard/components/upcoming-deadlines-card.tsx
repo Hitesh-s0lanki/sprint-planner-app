@@ -8,7 +8,7 @@ interface Props {
     key: string;
     title: string;
     dueDate: string;
-    assigneeName: string;
+    assigneeName: string | null;
     status: string;
     priority: string;
   }[];
@@ -45,7 +45,9 @@ export function UpcomingDeadlinesCard({ data }: Props) {
                   {item.key}
                 </span>
                 <Badge
-                  variant={item.priority === "High" ? "destructive" : "secondary"}
+                  variant={
+                    item.priority === "High" ? "destructive" : "secondary"
+                  }
                   className="text-xs"
                 >
                   {item.priority}
@@ -53,7 +55,7 @@ export function UpcomingDeadlinesCard({ data }: Props) {
               </div>
               <p className="text-sm font-medium">{item.title}</p>
               <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                <span>{item.assigneeName}</span>
+                <span>{item.assigneeName || "Unassigned"}</span>
                 <span>•</span>
                 <span
                   className={isOverdue ? "font-medium text-destructive" : ""}
@@ -70,4 +72,3 @@ export function UpcomingDeadlinesCard({ data }: Props) {
     </div>
   );
 }
-

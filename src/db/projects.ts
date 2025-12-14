@@ -23,6 +23,8 @@ export const projects = pgTable("projects", {
   leadUserId: uuid("lead_user_id")
     .notNull()
     .references(() => users.id),
+
+  teamIds: uuid("team_ids").array().notNull().default([]),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });

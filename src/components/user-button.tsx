@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, startTransition } from "react";
 import { useRouter } from "next/navigation";
 import { LayoutDashboard, LogOut, Settings, User } from "lucide-react";
 import { useUser, useClerk } from "@clerk/nextjs";
@@ -32,6 +32,15 @@ export function UserButton() {
   const { user, isLoaded } = useUser();
   const { signOut } = useClerk();
   const [profileSheetOpen, setProfileSheetOpen] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
+
+  // Delay rendering DropdownMenu until after mount to prevent hydration mismatch
+  // Radix UI generates dynamic IDs that differ between server and client
+  useEffect(() => {
+    startTransition(() => {
+      setIsMounted(true);
+    });
+  }, []);
 
   if (!isLoaded || !user) {
     return null;
@@ -107,64 +116,72 @@ export function UserButton() {
 
   return (
     <>
-      <DropdownMenu>
-        <DropdownMenuTrigger>
-          <GenerateAvatar
-            seed={getUserName()}
-            variant="initials"
-            className="size-8"
-          />
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" side="bottom" className="w-72">
-          <DropdownMenuLabel>
-            <div className="flex items-center gap-4">
-              <GenerateAvatar
-                seed={getUserName()}
-                variant="initials"
-                className="size-9"
-              />
-              <div className="flex flex-col gap-1">
-                <span className="truncate font-medium">{getUserName()}</span>
-                <span className="font-sm text-muted-foreground truncate font-normal">
-                  {getUserEmail()}
-                </span>
+      {isMounted ? (
+        <DropdownMenu>
+          <DropdownMenuTrigger>
+            <GenerateAvatar
+              seed={getUserName()}
+              variant="initials"
+              className="size-8"
+            />
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" side="bottom" className="w-72">
+            <DropdownMenuLabel>
+              <div className="flex items-center gap-4">
+                <GenerateAvatar
+                  seed={getUserName()}
+                  variant="initials"
+                  className="size-9"
+                />
+                <div className="flex flex-col gap-1">
+                  <span className="truncate font-medium">{getUserName()}</span>
+                  <span className="font-sm text-muted-foreground truncate font-normal">
+                    {getUserEmail()}
+                  </span>
+                </div>
               </div>
-            </div>
-          </DropdownMenuLabel>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem
-            className="flex cursor-pointer items-center justify-between"
-            onClick={() => router.push("/app")}
-          >
-            Home
-            <LayoutDashboard className="size-4" />
-          </DropdownMenuItem>
+            </DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem
+              className="flex cursor-pointer items-center justify-between"
+              onClick={() => router.push("/app")}
+            >
+              Home
+              <LayoutDashboard className="size-4" />
+            </DropdownMenuItem>
 
-          <DropdownMenuItem
-            className="flex cursor-pointer items-center justify-between"
-            onClick={() => router.push("/app/settings")}
-          >
-            Settings
-            <Settings className="size-4" />
-          </DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem
-            className="flex cursor-pointer items-center justify-between"
-            onClick={() => setProfileSheetOpen(true)}
-          >
-            Profile
-            <User className="size-4" />
-          </DropdownMenuItem>
-          <DropdownMenuItem
-            className="flex cursor-pointer items-center justify-between"
-            onClick={onLogout}
-            variant="destructive"
-          >
-            Logout
-            <LogOut className="size-4" />
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
+            <DropdownMenuItem
+              className="flex cursor-pointer items-center justify-between"
+              onClick={() => router.push("/app/settings")}
+            >
+              Settings
+              <Settings className="size-4" />
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem
+              className="flex cursor-pointer items-center justify-between"
+              onClick={() => setProfileSheetOpen(true)}
+            >
+              Profile
+              <User className="size-4" />
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              className="flex cursor-pointer items-center justify-between"
+              onClick={onLogout}
+              variant="destructive"
+            >
+              Logout
+              <LogOut className="size-4" />
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      ) : (
+        <GenerateAvatar
+          seed={getUserName()}
+          variant="initials"
+          className="size-8"
+        />
+      )}
       <ProfileSheet
         open={profileSheetOpen}
         onOpenChange={setProfileSheetOpen}

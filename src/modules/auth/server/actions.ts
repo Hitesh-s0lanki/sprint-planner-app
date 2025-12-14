@@ -1,6 +1,6 @@
 import { db } from "@/lib/db";
 import { users } from "@/db/users";
-import { eq } from "drizzle-orm";
+import { eq, or } from "drizzle-orm";
 
 /**
  * Get user by Clerk ID
@@ -24,32 +24,47 @@ export async function getUserByClerkId(clerkId: string) {
 
 /**
  * Update user profile
- * @param clerkId - Clerk user ID
- * @param data - User profile data to update (name, description, profession)
- * @returns Updated user object
+ * @param clerkIdOrEmail - Clerk user ID or email
+ * @param data - User data to update
+ * @returns Updated user object or null
  */
 export async function updateUserProfile(
-  clerkId: string,
+  clerkIdOrEmail: string,
   data: {
     name?: string;
+    email?: string;
     description?: string;
     profession?: string;
+    clerkId?: string;
   }
 ) {
   try {
+    // Build WHERE conditions safely (no undefined inside or())
+    const conditions = [
+      eq(users.clerkId, clerkIdOrEmail),
+      eq(users.email, clerkIdOrEmail),
+    ];
+
+    // If caller provided an explicit email (different from clerkIdOrEmail), allow matching on it too
+    if (data.email && data.email !== clerkIdOrEmail) {
+      conditions.push(eq(users.email, data.email));
+    }
+
     const [updatedUser] = await db
       .update(users)
       .set({
         ...(data.name !== undefined && { name: data.name }),
-        ...(data.description !== undefined && { description: data.description }),
+        ...(data.email !== undefined && { email: data.email }),
+        ...(data.description !== undefined && {
+          description: data.description,
+        }),
         ...(data.profession !== undefined && { profession: data.profession }),
+        ...(data.clerkId !== undefined && { clerkId: data.clerkId }),
       })
-      .where(eq(users.clerkId, clerkId))
+      .where(or(...conditions))
       .returning();
 
-    if (!updatedUser) {
-      throw new Error("User not found");
-    }
+    if (!updatedUser) throw new Error("User not found");
 
     return updatedUser;
   } catch (error) {
@@ -57,4 +72,3 @@ export async function updateUserProfile(
     throw new Error("Failed to update user profile");
   }
 }
-

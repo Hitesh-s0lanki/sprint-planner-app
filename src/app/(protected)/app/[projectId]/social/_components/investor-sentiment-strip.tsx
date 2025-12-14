@@ -25,46 +25,58 @@ export function InvestorSentimentStrip({
   }
 
   return (
-    <div className="flex gap-3 p-4 border-b bg-muted/30 overflow-x-auto">
+    <div className="flex gap-2 sm:gap-3 p-3 sm:p-4 border-b bg-muted/30 overflow-x-auto">
       <Badge
         variant="outline"
-        className="rounded-xl px-3 py-1.5 border-border/60 bg-background"
+        className="bg-background/95 backdrop-blur-sm shrink-0 text-xs sm:text-sm px-2 sm:px-3 py-1 sm:py-1.5"
       >
-        <span className="text-xs font-medium">Total Investors:</span>
-        <span className="ml-1.5 font-semibold">{summary.totalInvestors}</span>
+        Coming Soon
+      </Badge>
+      <Badge
+        variant="outline"
+        className="rounded-xl px-2 sm:px-3 py-1 sm:py-1.5 border-border/60 bg-background shrink-0"
+      >
+        <span className="text-xs font-medium">Total:</span>
+        <span className="ml-1 sm:ml-1.5 font-semibold">
+          {summary.totalInvestors}
+        </span>
       </Badge>
 
       <Badge
         variant="outline"
-        className="rounded-xl px-3 py-1.5 border-orange-200 bg-orange-50 text-orange-700 dark:border-orange-900 dark:bg-orange-950 dark:text-orange-300"
+        className="rounded-xl px-2 sm:px-3 py-1 sm:py-1.5 border-orange-200 bg-orange-50 text-orange-700 dark:border-orange-900 dark:bg-orange-950 dark:text-orange-300 shrink-0"
       >
         <span className="text-xs">🔥 High:</span>
-        <span className="ml-1.5 font-semibold">{summary.highInterest}</span>
+        <span className="ml-1 sm:ml-1.5 font-semibold">
+          {summary.highInterest}
+        </span>
       </Badge>
 
       <Badge
         variant="outline"
-        className="rounded-xl px-3 py-1.5 border-blue-200 bg-blue-50 text-blue-700 dark:border-blue-900 dark:bg-blue-950 dark:text-blue-300"
+        className="rounded-xl px-2 sm:px-3 py-1 sm:py-1.5 border-blue-200 bg-blue-50 text-blue-700 dark:border-blue-900 dark:bg-blue-950 dark:text-blue-300 shrink-0"
       >
         <span className="text-xs">🙂 Warm:</span>
-        <span className="ml-1.5 font-semibold">{summary.warm}</span>
+        <span className="ml-1 sm:ml-1.5 font-semibold">{summary.warm}</span>
       </Badge>
 
       <Badge
         variant="outline"
-        className="rounded-xl px-3 py-1.5 border-gray-200 bg-gray-50 text-gray-700 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-300"
+        className="rounded-xl px-2 sm:px-3 py-1 sm:py-1.5 border-gray-200 bg-gray-50 text-gray-700 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-300 shrink-0"
       >
         <span className="text-xs">🤔 Exploring:</span>
-        <span className="ml-1.5 font-semibold">{summary.exploring}</span>
+        <span className="ml-1 sm:ml-1.5 font-semibold">
+          {summary.exploring}
+        </span>
       </Badge>
 
       {summary.lastActivity && (
         <Badge
           variant="outline"
-          className="rounded-xl px-3 py-1.5 border-border/60 bg-background ml-auto"
+          className="rounded-xl px-2 sm:px-3 py-1 sm:py-1.5 border-border/60 bg-background ml-auto shrink-0 hidden sm:flex"
         >
           <span className="text-xs font-medium">Last Activity:</span>
-          <span className="ml-1.5 text-xs">
+          <span className="ml-1 sm:ml-1.5 text-xs">
             {formatDistanceToNow(summary.lastActivity, { addSuffix: true })}
           </span>
         </Badge>
@@ -72,4 +84,3 @@ export function InvestorSentimentStrip({
     </div>
   );
 }
-

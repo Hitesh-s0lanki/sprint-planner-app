@@ -1,8 +1,9 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { BoardTask, TaskStatus } from "../board-mock";
+import type { BoardTask, TaskStatus } from "@/modules/tasks/server/actions";
 import { TaskCard } from "./task-card";
+import { TaskDetailSheet } from "@/components/sheets/task-detail-sheet";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   DndContext,
@@ -20,7 +21,7 @@ import {
   SortableContext,
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
-import { KanbanTaskDraggable } from "./kanban/KanbanTaskDraggable";
+import { KanbanTaskDraggable } from "./KanbanTaskDraggable";
 import { cn } from "@/lib/utils";
 
 const STATUS_COLUMNS: {
@@ -59,9 +60,15 @@ interface KanbanColumnProps {
   column: { id: TaskStatus; label: string; color: string; bgColor: string };
   tasks: BoardTask[];
   isOver?: boolean;
+  onTaskClick?: (task: BoardTask) => void;
 }
 
-function KanbanColumn({ column, tasks, isOver }: KanbanColumnProps) {
+function KanbanColumn({
+  column,
+  tasks,
+  isOver,
+  onTaskClick,
+}: KanbanColumnProps) {
   const { setNodeRef, isOver: columnIsOver } = useDroppable({
     id: column.id,
   });
@@ -71,23 +78,25 @@ function KanbanColumn({ column, tasks, isOver }: KanbanColumnProps) {
       <Card
         ref={setNodeRef}
         className={cn(
-          "flex h-full max-h-[calc(100vh-260px)] flex-col rounded-xl border transition-all duration-200",
+          "flex h-full max-h-[calc(100vh-260px)] flex-col rounded-xl border-2 transition-all duration-200 bg-gradient-to-b from-background to-muted/30",
           columnIsOver || isOver
-            ? "border-primary bg-slate-50 shadow-lg ring-2 ring-primary/20"
-            : "border-border bg-slate-50"
+            ? "border-primary shadow-xl ring-4 ring-primary/10 bg-gradient-to-b from-primary/5 to-primary/10"
+            : "border-border/50 shadow-md hover:shadow-lg"
         )}
       >
-        <CardHeader className="shrink-0 space-y-3 py-1 pb-0">
+        <CardHeader className="shrink-0 space-y-3 py-4 pb-3 border-b border-border/50">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2.5">
-              <div className={cn("h-2.5 w-2.5 rounded-full", column.bgColor)} />
-              <CardTitle className={cn("text-sm font-semibold", column.color)}>
+            <div className="flex items-center gap-3">
+              <div
+                className={cn("h-3 w-3 rounded-full shadow-sm", column.bgColor)}
+              />
+              <CardTitle className={cn("text-base font-bold", column.color)}>
                 {column.label}
               </CardTitle>
             </div>
             <span
               className={cn(
-                "flex h-6 min-w-6 items-center justify-center rounded-full px-2 text-xs font-medium",
+                "flex h-7 min-w-7 items-center justify-center rounded-full px-2.5 text-xs font-bold shadow-sm",
                 column.bgColor,
                 column.color
               )}
@@ -96,14 +105,22 @@ function KanbanColumn({ column, tasks, isOver }: KanbanColumnProps) {
             </span>
           </div>
         </CardHeader>
-        <CardContent className="flex-1 space-y-2.5 overflow-y-auto p-3">
+        <CardContent className="flex-1 space-y-3 overflow-y-auto p-4">
           <SortableContext
             items={tasks.map((t) => t.id)}
             strategy={verticalListSortingStrategy}
           >
             {tasks.map((task) => (
               <KanbanTaskDraggable id={task.id} key={task.id}>
-                <TaskCard task={task} compact />
+                <div
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onTaskClick?.(task);
+                  }}
+                  className="cursor-pointer"
+                >
+                  <TaskCard task={task} compact />
+                </div>
               </KanbanTaskDraggable>
             ))}
           </SortableContext>
@@ -121,12 +138,20 @@ function KanbanColumn({ column, tasks, isOver }: KanbanColumnProps) {
 interface KanbanViewProps {
   tasks: BoardTask[];
   subtasksByParent?: Map<string, BoardTask[]>;
-  onStatusChange: (taskId: string, status: TaskStatus) => void;
+  onStatusChange: (taskId: string, status: TaskStatus) => Promise<void>;
+  projectId: string;
 }
 
-export function KanbanView({ tasks, onStatusChange }: KanbanViewProps) {
+export function KanbanView({
+  tasks,
+  subtasksByParent,
+  onStatusChange,
+  projectId,
+}: KanbanViewProps) {
   const [activeId, setActiveId] = useState<string | null>(null);
   const [overColumnId, setOverColumnId] = useState<string | null>(null);
+  const [selectedTask, setSelectedTask] = useState<BoardTask | null>(null);
+  const [sheetOpen, setSheetOpen] = useState(false);
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -145,9 +170,12 @@ export function KanbanView({ tasks, onStatusChange }: KanbanViewProps) {
       todo: [],
       in_progress: [],
       done: [],
+      cancelled: [],
     };
     for (const t of allTasks) {
-      map[t.status].push(t);
+      if (map[t.status]) {
+        map[t.status].push(t);
+      }
     }
     return map;
   }, [allTasks]);
@@ -174,7 +202,7 @@ export function KanbanView({ tasks, onStatusChange }: KanbanViewProps) {
     setOverColumnId(null);
   };
 
-  const handleDragEnd = (event: DragEndEvent) => {
+  const handleDragEnd = async (event: DragEndEvent) => {
     const { active, over } = event;
     setActiveId(null);
     setOverColumnId(null);
@@ -187,42 +215,64 @@ export function KanbanView({ tasks, onStatusChange }: KanbanViewProps) {
     // Check if dropping on a column
     const targetColumn = STATUS_COLUMNS.find((c) => c.id === overId);
     if (targetColumn) {
-      onStatusChange(taskId, targetColumn.id);
+      await onStatusChange(taskId, targetColumn.id);
       return;
     }
 
     // Check if dropping on another task (move to that task's column)
     const targetTask = allTasks.find((t) => t.id === overId);
     if (targetTask) {
-      onStatusChange(taskId, targetTask.status);
+      await onStatusChange(taskId, targetTask.status);
     }
   };
 
+  const handleTaskClick = (task: BoardTask) => {
+    setSelectedTask(task);
+    setSheetOpen(true);
+  };
+
   return (
-    <DndContext
-      sensors={sensors}
-      collisionDetection={closestCenter}
-      onDragStart={handleDragStart}
-      onDragOver={handleDragOver}
-      onDragEnd={handleDragEnd}
-    >
-      <div className="grid h-full grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
-        {STATUS_COLUMNS.map((column) => (
-          <KanbanColumn
-            key={column.id}
-            column={column}
-            tasks={columns[column.id] ?? []}
-            isOver={overColumnId === column.id}
-          />
-        ))}
-      </div>
-      <DragOverlay>
-        {activeTask ? (
-          <div className="rotate-2 opacity-95 shadow-2xl">
-            <TaskCard task={activeTask} compact />
-          </div>
-        ) : null}
-      </DragOverlay>
-    </DndContext>
+    <>
+      <DndContext
+        sensors={sensors}
+        collisionDetection={closestCenter}
+        onDragStart={handleDragStart}
+        onDragOver={handleDragOver}
+        onDragEnd={handleDragEnd}
+      >
+        <div className="grid h-full grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
+          {STATUS_COLUMNS.map((column) => (
+            <KanbanColumn
+              key={column.id}
+              column={column}
+              tasks={columns[column.id] ?? []}
+              isOver={overColumnId === column.id}
+              onTaskClick={handleTaskClick}
+            />
+          ))}
+        </div>
+        <DragOverlay>
+          {activeTask ? (
+            <div className="rotate-2 opacity-95 shadow-2xl">
+              <TaskCard task={activeTask} compact />
+            </div>
+          ) : null}
+        </DragOverlay>
+      </DndContext>
+      <TaskDetailSheet
+        task={selectedTask}
+        open={sheetOpen}
+        onOpenChange={setSheetOpen}
+        subtasks={
+          selectedTask && subtasksByParent
+            ? subtasksByParent.get(selectedTask.id)
+            : []
+        }
+        projectId={projectId}
+        onTaskUpdate={() => {
+          // Task updates are handled by query invalidation in the sheet
+        }}
+      />
+    </>
   );
 }

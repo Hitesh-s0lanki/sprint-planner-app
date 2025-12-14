@@ -2,7 +2,12 @@
 
 import { useState, useCallback, useRef, useEffect } from "react";
 import { useUser } from "@clerk/nextjs";
-import type { ChatResponse, ConnectionStatus, UserPreferences } from "../types";
+import type {
+  ChatResponse,
+  ConnectionStatus,
+  UserPreferences,
+  Event,
+} from "../types";
 
 // Internal types for streaming and hook options
 interface StreamingChatResponse {
@@ -12,6 +17,8 @@ interface StreamingChatResponse {
   error?: string;
   error_message?: string;
   done?: boolean;
+  event?: Event;
+  response_content?: string;
 }
 
 interface ChatMessage {
@@ -28,6 +35,8 @@ interface UseStreamingChatOptions {
   onError?: (error: Error) => void;
   onStageChange?: (stage: number) => void;
   onInitialMessages?: (messages: ChatMessage[]) => void;
+  onConnectionStatusChange?: (status: ConnectionStatus, stage: number) => void;
+  onEvent?: (event: Event) => void;
   autoConnect?: boolean;
 }
 
@@ -48,6 +57,8 @@ export function useStreamingChat(options: UseStreamingChatOptions) {
     onError,
     onStageChange,
     onInitialMessages,
+    onConnectionStatusChange,
+    onEvent,
     autoConnect = true,
   } = options;
 
@@ -153,6 +164,14 @@ export function useStreamingChat(options: UseStreamingChatOptions) {
       // Parse the response
       const responseData: ChatResponse = await response.json();
 
+      // Handle connection status change
+      if (onConnectionStatusChange && responseData.connection_status) {
+        onConnectionStatusChange(
+          responseData.connection_status,
+          responseData.idea_state_stage ?? ideaStateStageRef.current
+        );
+      }
+
       // Handle initial messages from "started" response
       if (responseData.messages && responseData.messages.length > 0) {
         const initialMessages: ChatMessage[] = responseData.messages.map(
@@ -202,6 +221,7 @@ export function useStreamingChat(options: UseStreamingChatOptions) {
     onError,
     onInitialMessages,
     onStageChange,
+    onConnectionStatusChange,
     getUserPreferences,
   ]);
 
@@ -290,12 +310,14 @@ export function useStreamingChat(options: UseStreamingChatOptions) {
 
         // Check if response is streaming or a single JSON response
         const contentType = response.headers.get("content-type") || "";
+        const isNDJSON = contentType.includes("application/x-ndjson");
         const isStreaming =
           contentType.includes("text/event-stream") ||
-          contentType.includes("stream");
+          contentType.includes("stream") ||
+          isNDJSON;
 
         if (isStreaming) {
-          // Handle streaming response
+          // Handle streaming response (SSE or NDJSON)
           const reader = response.body?.getReader();
           const decoder = new TextDecoder();
 
@@ -317,30 +339,68 @@ export function useStreamingChat(options: UseStreamingChatOptions) {
             for (const line of lines) {
               if (line.trim()) {
                 try {
-                  // Handle SSE format (data: {...})
+                  // Handle SSE format (data: {...}) or NDJSON (direct JSON)
                   const cleanLine = line.startsWith("data: ")
                     ? line.slice(6)
                     : line;
 
-                  const data: StreamingChatResponse = JSON.parse(cleanLine);
+                  // Parse as ChatResponse for event handling
+                  const chatResponse: ChatResponse = JSON.parse(cleanLine);
+                  const data: StreamingChatResponse = chatResponse;
 
                   // Handle error in stream
-                  if (data.error || data.error_message) {
+                  if (
+                    data.error ||
+                    data.error_message ||
+                    chatResponse.error_message
+                  ) {
                     throw new Error(
-                      data.error || data.error_message || "An error occurred"
+                      data.error ||
+                        data.error_message ||
+                        chatResponse.error_message ||
+                        "An error occurred"
                     );
                   }
 
-                  // Handle stage changes
-                  if (data.idea_state_stage !== undefined && onStageChange) {
-                    onStageChange(data.idea_state_stage);
+                  // Handle connection status change
+                  if (
+                    onConnectionStatusChange &&
+                    chatResponse.connection_status
+                  ) {
+                    onConnectionStatusChange(
+                      chatResponse.connection_status,
+                      chatResponse.idea_state_stage ?? ideaStateStageRef.current
+                    );
                   }
 
-                  // Handle message chunks
+                  // Handle events (for event streaming)
+                  if (
+                    chatResponse.connection_status === "events_streaming" &&
+                    chatResponse.event &&
+                    onEvent
+                  ) {
+                    onEvent(chatResponse.event);
+                  }
+
+                  // Handle stage changes
+                  if (
+                    chatResponse.idea_state_stage !== undefined &&
+                    onStageChange
+                  ) {
+                    onStageChange(chatResponse.idea_state_stage);
+                  }
+
+                  // Handle message chunks (for regular streaming)
                   if (data.message) {
                     const chunk = data.message;
                     fullResponse += chunk;
                     onChunk?.(chunk);
+                  }
+
+                  // Handle response_content (for events_completed)
+                  if (chatResponse.response_content) {
+                    fullResponse += chatResponse.response_content;
+                    onChunk?.(chatResponse.response_content);
                   }
 
                   // Check if stream is done
@@ -366,22 +426,55 @@ export function useStreamingChat(options: UseStreamingChatOptions) {
               const cleanLine = buffer.startsWith("data: ")
                 ? buffer.slice(6)
                 : buffer;
-              const data: StreamingChatResponse = JSON.parse(cleanLine);
+              const chatResponse: ChatResponse = JSON.parse(cleanLine);
+              const data: StreamingChatResponse = chatResponse;
 
-              if (data.error || data.error_message) {
+              if (
+                data.error ||
+                data.error_message ||
+                chatResponse.error_message
+              ) {
                 throw new Error(
-                  data.error || data.error_message || "An error occurred"
+                  data.error ||
+                    data.error_message ||
+                    chatResponse.error_message ||
+                    "An error occurred"
                 );
               }
 
-              if (data.idea_state_stage !== undefined && onStageChange) {
-                onStageChange(data.idea_state_stage);
+              // Handle connection status change
+              if (onConnectionStatusChange && chatResponse.connection_status) {
+                onConnectionStatusChange(
+                  chatResponse.connection_status,
+                  chatResponse.idea_state_stage ?? ideaStateStageRef.current
+                );
+              }
+
+              // Handle events
+              if (
+                chatResponse.connection_status === "events_streaming" &&
+                chatResponse.event &&
+                onEvent
+              ) {
+                onEvent(chatResponse.event);
+              }
+
+              if (
+                chatResponse.idea_state_stage !== undefined &&
+                onStageChange
+              ) {
+                onStageChange(chatResponse.idea_state_stage);
               }
 
               if (data.message) {
                 const chunk = data.message;
                 fullResponse += chunk;
                 onChunk?.(chunk);
+              }
+
+              if (chatResponse.response_content) {
+                fullResponse += chatResponse.response_content;
+                onChunk?.(chatResponse.response_content);
               }
             } catch (e) {
               // Ignore parse errors for incomplete final line
@@ -413,6 +506,14 @@ export function useStreamingChat(options: UseStreamingChatOptions) {
           // Handle error
           if (responseData.error_message) {
             throw new Error(responseData.error_message);
+          }
+
+          // Handle connection status change
+          if (onConnectionStatusChange && responseData.connection_status) {
+            onConnectionStatusChange(
+              responseData.connection_status,
+              responseData.idea_state_stage ?? ideaStateStageRef.current
+            );
           }
 
           // Handle stage changes from ChatResponse
@@ -474,6 +575,8 @@ export function useStreamingChat(options: UseStreamingChatOptions) {
       sessionId,
       onError,
       onStageChange,
+      onConnectionStatusChange,
+      onEvent,
       isConnected,
       connect,
       getUserPreferences,
