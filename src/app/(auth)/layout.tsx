@@ -1,13 +1,15 @@
-import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft, Sparkles, Clock, Rocket } from "lucide-react";
+import { generateMetadata as generateSEOMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "SprintPlanner – Sign In",
+export const metadata = generateSEOMetadata({
+  title: "Sign In – SprintPlanner",
   description:
-    "Sign in or create an account to start your 4-week venture sprint.",
-};
+    "Sign in to SprintPlanner to start your 4-week venture sprint. Turn your ideas into executable ventures with our structured framework.",
+  path: "/sign-in",
+  keywords: ["sign in", "login", "SprintPlanner account"],
+});
 
 export default function AuthLayout({
   children,
